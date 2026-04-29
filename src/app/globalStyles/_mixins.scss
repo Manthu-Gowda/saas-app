@@ -1,0 +1,62 @@
+@use "variables" as *;
+
+// ─── Flex helpers ──────────────────────────────────────────
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+// ─── Card ──────────────────────────────────────────────────
+@mixin card {
+  background: $card_bg;
+  border: 1px solid $primary_border;
+  border-radius: $radius_lg;
+  box-shadow: $shadow_sm;
+}
+
+// ─── Truncate text ─────────────────────────────────────────
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ─── Scrollbar hide ────────────────────────────────────────
+@mixin scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ─── Responsive ────────────────────────────────────────────
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+// ─── Gradient ──────────────────────────────────────────────
+@mixin brand-gradient {
+  background: linear-gradient(135deg, $brand_color 0%, $brand_color_dark 100%);
+}

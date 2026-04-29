@@ -1,0 +1,295 @@
+@use "../../globalStyles" as *;
+
+/* ═══ Shell ══════════════════════════════════════════════════ */
+.customer-layout {
+  height: 100dvh;
+  display: flex;
+  overflow: hidden;
+  background: $primary_bg;
+
+  &__right {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    @include flex-between;
+    padding: 0 20px;
+    height: 64px;
+    background: $primary_white;
+    border-bottom: 1px solid $primary_border;
+    box-shadow: $shadow_sm;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    @include scrollbar-hide;
+  }
+}
+
+/* ═══ Sidebar ════════════════════════════════════════════════ */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: $sidebar_bg;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+
+  &__top {
+    @include flex-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 16px;
+  }
+
+  &__brand {
+    @include flex-start;
+    gap: 8px;
+  }
+
+  &__brand-icon {
+    font-size: 22px;
+  }
+
+  &__brand-name {
+    font-size: $font_m;
+    font-weight: 800;
+    color: $primary_white;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__toggle {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 8px;
+    @include flex-center;
+    cursor: pointer;
+    color: $primary_white;
+    font-size: 14px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  &__center {
+    flex: 1;
+    overflow-y: auto;
+    @include scrollbar-hide;
+  }
+
+  &__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__menu-row {
+    display: flex;
+  }
+
+  &__menu-btn {
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    border-radius: $radius_md;
+    transition: background 0.2s ease, color 0.2s ease;
+    font-size: $font_s;
+    font-weight: 500;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: $primary_white;
+    }
+
+    &.is-active {
+      background: $sidebar_active;
+      color: $primary_white;
+      box-shadow: 0 4px 14px rgba(108, 71, 255, 0.4);
+    }
+  }
+
+  &__menu-icon {
+    width: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__menu-label {
+    font-size: $font_s;
+  }
+
+  &__bottom {
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 16px;
+  }
+
+  &__logout-btn {
+    width: 100%;
+    height: 44px;
+    @include flex-start;
+    gap: 10px;
+    padding: 0 12px;
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: $radius_md;
+    cursor: pointer;
+    font-size: $font_s;
+    font-weight: 500;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+  }
+}
+
+/* ═══ Header ═════════════════════════════════════════════════ */
+.header {
+  &__left {
+    @include flex-start;
+    gap: 12px;
+  }
+
+  &__right {
+    @include flex-start;
+    gap: 10px;
+  }
+
+  &__navbtn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid $primary_border;
+    border-radius: $radius_md;
+    background: $primary_bg;
+    @include flex-center;
+    cursor: pointer;
+    font-size: 18px;
+    color: $secondary_text;
+  }
+
+  &__notif-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid $primary_border;
+    border-radius: $radius_md;
+    background: $primary_bg;
+    @include flex-center;
+    cursor: pointer;
+    font-size: 16px;
+    color: $secondary_text;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $brand_color;
+      color: $brand_color;
+      background: $brand_color_light;
+    }
+  }
+
+  &__user-btn {
+    @include flex-start;
+    gap: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: $radius_md;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: $primary_bg;
+    }
+  }
+
+  &__user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    @include brand-gradient;
+    @include flex-center;
+    font-size: $font_sm;
+    font-weight: 700;
+    color: $primary_white;
+    flex-shrink: 0;
+  }
+
+  &__user-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__user-name {
+    font-size: $font_s;
+    font-weight: 600;
+    color: $primary_text;
+  }
+
+  &__user-plan {
+    font-size: $font_xs;
+    color: $brand_color;
+    font-weight: 500;
+  }
+}
+
+/* ═══ Mobile Drawer ══════════════════════════════════════════ */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.sidebar.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 260px;
+  z-index: 999;
+  transform: translateX(-110%);
+  transition: transform 0.25s ease;
+
+  &.open {
+    transform: translateX(0);
+  }
+}

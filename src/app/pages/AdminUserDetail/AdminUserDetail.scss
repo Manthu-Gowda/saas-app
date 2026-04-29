@@ -1,0 +1,109 @@
+@use "../../globalStyles" as *;
+
+.admin-user-detail-page {
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+
+    @include tablet {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .detail-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .detail-card {
+    @include card;
+    padding: 24px;
+
+    h3 {
+      font-size: $font_m;
+      font-weight: 700;
+      color: $primary_text;
+      margin: 0 0 20px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid $primary_border;
+    }
+
+    .info-row {
+      @include flex-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed $primary_border;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        color: $secondary_text;
+        font-size: $font_s;
+      }
+
+      .info-value {
+        color: $primary_text;
+        font-weight: 600;
+        font-size: $font_s;
+      }
+    }
+
+    .badges-row {
+      @include flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .usage-meter {
+      .usage-labels {
+        @include flex-between;
+        font-size: $font_s;
+        color: $secondary_text;
+        margin-bottom: 8px;
+
+        span:last-child {
+          font-weight: 600;
+          color: $primary_text;
+        }
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: $primary_border;
+        border-radius: 999px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: $brand_color;
+          border-radius: 999px;
+          transition: width 0.5s ease;
+        }
+      }
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+    }
+  }
+
+  .danger-zone {
+    border-color: rgba(239, 68, 68, 0.3);
+
+    h3 {
+      color: $danger;
+      border-bottom-color: rgba(239, 68, 68, 0.2);
+    }
+
+    p {
+      color: $secondary_text;
+      font-size: $font_s;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+  }
+}

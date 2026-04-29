@@ -1,0 +1,73 @@
+@use "../../globalStyles" as *;
+
+.subheader {
+  @include flex-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  &--divider {
+    padding-bottom: 16px;
+    border-bottom: 1px solid $primary_border;
+  }
+
+  &--compact {
+    margin-bottom: 12px;
+  }
+
+  &__left {
+    @include flex-start;
+    gap: 10px;
+  }
+
+  &__titleRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__title {
+    font-size: $font_l;
+    font-weight: 700;
+    color: $primary_text;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: $font_s;
+    color: $secondary_text;
+    margin-top: 2px;
+  }
+
+  &__back {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius_md;
+    border: 1px solid $primary_border;
+    background: $primary_white;
+    @include flex-center;
+    cursor: pointer;
+    color: $secondary_text;
+    font-size: $font_m;
+    transition: all 0.2s ease;
+    box-shadow: $shadow_sm;
+
+    &:hover {
+      background: $brand_color_light;
+      color: $brand_color;
+      border-color: $brand_color;
+    }
+  }
+
+  &__right {
+    @include flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__center {
+    @include flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}

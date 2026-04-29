@@ -1,0 +1,82 @@
+@use "../../globalStyles" as *;
+
+.tools-list-page {
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .tool-card {
+    @include card;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      border-color: $brand_color;
+      transform: translateY(-2px);
+      box-shadow: $shadow_md;
+
+      .tool-card__arrow {
+        color: $brand_color;
+        transform: translateX(4px);
+      }
+    }
+
+    &__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: $radius_md;
+      background: $brand_color_light;
+      color: $brand_color;
+      @include flex-center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    &__name {
+      font-size: $font_m;
+      font-weight: 700;
+      color: $primary_text;
+      margin: 0 0 8px 0;
+    }
+
+    &__desc {
+      font-size: $font_s;
+      color: $secondary_text;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    &__footer {
+      @include flex-between;
+      border-top: 1px solid $primary_border;
+      padding-top: 16px;
+    }
+
+    &__tag {
+      font-size: $font_xs;
+      font-weight: 600;
+      color: $secondary_text;
+      background: $primary_bg;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    &__arrow {
+      color: $muted_text;
+      transition: all 0.2s ease;
+    }
+  }
+
+  .tools-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: $secondary_text;
+  }
+}

@@ -1,0 +1,113 @@
+@use "../../globalStyles" as *;
+
+.admin-dashboard-page {
+  .admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .admin-stat-card {
+    @include card;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+
+    .stat-header {
+      @include flex-between;
+      margin-bottom: 16px;
+
+      .stat-title {
+        font-size: $font_s;
+        font-weight: 600;
+        color: $secondary_text;
+      }
+
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: $radius_sm;
+        @include flex-center;
+        font-size: 18px;
+      }
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: $primary_text;
+      margin-bottom: 8px;
+    }
+
+    .stat-footer {
+      font-size: $font_xs;
+      color: $secondary_text;
+
+      .trend {
+        font-weight: 700;
+        &.positive { color: $success; }
+        &.negative { color: $danger; }
+      }
+    }
+
+    .mini-chart {
+      margin-top: 20px;
+      height: 40px;
+      
+      &__bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 100%;
+
+        .bar {
+          flex: 1;
+          border-radius: 2px 2px 0 0;
+          opacity: 0.8;
+          transition: height 0.5s ease;
+        }
+      }
+    }
+  }
+
+  .admin-charts-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+
+    @include tablet {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+      @include card;
+      padding: 24px;
+
+      h3 {
+        margin: 0 0 20px 0;
+        font-size: $font_m;
+        color: $primary_text;
+      }
+
+      .chart-placeholder {
+        height: 300px;
+        background: $primary_bg;
+        border-radius: $radius_md;
+        border: 1px dashed $primary_border;
+        @include flex-center;
+        color: $muted_text;
+        font-weight: 600;
+      }
+    }
+  }
+}

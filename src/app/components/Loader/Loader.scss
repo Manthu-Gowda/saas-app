@@ -1,0 +1,46 @@
+@use "../../globalStyles" as *;
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  @include flex-center;
+}
+
+.loader-inline {
+  @include flex-center;
+  padding: 24px;
+  width: 100%;
+}
+
+.loader-spinner {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: $primary_border;
+  border-top-color: $brand_color;
+  animation: spin 0.75s linear infinite;
+
+  &.size-sm {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+
+  &.size-md {
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+  }
+
+  &.size-lg {
+    width: 52px;
+    height: 52px;
+    border-width: 4px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

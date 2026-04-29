@@ -1,0 +1,66 @@
+@use "../../globalStyles" as *;
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%;
+
+  .input-label {
+    font-size: $font_s;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: $primary_text;
+  }
+
+  .required-asterisk {
+    color: $danger;
+    margin-left: 2px;
+  }
+
+  .upload-container {
+    .ant-upload-dragger {
+      border: 2px dashed $primary_border;
+      border-radius: $radius_md;
+      background: rgba(108, 71, 255, 0.02);
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: $brand_color;
+      }
+    }
+
+    .ant-btn {
+      height: 40px;
+      border-radius: $radius_md;
+      border-color: $primary_border;
+      color: $primary_text;
+      font-size: $font_s;
+      box-shadow: $shadow_sm;
+
+      &:hover {
+        border-color: $brand_color;
+        color: $brand_color;
+      }
+    }
+  }
+
+  .input-error-text {
+    color: $danger;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  .input-helper-text {
+    color: $secondary_text;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  &.has-error {
+    .ant-upload-dragger,
+    .ant-btn {
+      border-color: $danger !important;
+    }
+  }
+}

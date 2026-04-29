@@ -1,0 +1,60 @@
+@use "../../globalStyles" as *;
+
+.history-page {
+  .history-content {
+    @include card;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .prompt-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+
+    .prompt-text {
+      @include truncate;
+      flex: 1;
+      color: $secondary_text;
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: $muted_text;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      display: flex;
+      opacity: 0;
+
+      &:hover {
+        color: $brand_color;
+        background: $brand_color_light;
+      }
+    }
+  }
+
+  // Show copy button on row hover
+  .ant-table-row:hover .copy-btn {
+    opacity: 1;
+  }
+
+  .action-btn {
+    background: none;
+    border: none;
+    color: $secondary_text;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $brand_color;
+      background: $brand_color_light;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+@use "../../globalStyles" as *;
+
+.settings-page {
+  max-width: 800px;
+
+  .settings-card {
+    @include card;
+    margin-bottom: 24px;
+    padding: 24px;
+
+    &__title {
+      font-size: $font_m;
+      font-weight: 700;
+      color: $primary_text;
+      margin: 0 0 20px 0;
+      padding-bottom: 16px;
+      border-bottom: 1px solid $primary_border;
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 500px;
+    }
+  }
+
+  .settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+  }
+}

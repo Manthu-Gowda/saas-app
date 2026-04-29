@@ -1,0 +1,68 @@
+@use "../../globalStyles" as *;
+
+.appModal {
+  .ant-modal-content {
+    border-radius: $radius_xl !important;
+    padding: 0 !important;
+    overflow: hidden;
+    box-shadow: $shadow_lg;
+  }
+
+  &__header {
+    @include flex-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid $primary_border;
+    background: $primary_bg;
+  }
+
+  &__title {
+    font-size: $font_m;
+    font-weight: 700;
+    color: $primary_text;
+    margin: 0;
+  }
+
+  &__close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid $primary_border;
+    background: $primary_white;
+    @include flex-center;
+    cursor: pointer;
+    color: $secondary_text;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $danger_light;
+      color: $danger;
+      border-color: $danger;
+    }
+  }
+
+  &__body {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: 65vh;
+    @include scrollbar-hide;
+  }
+
+  &__footer {
+    display: flex;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid $primary_border;
+
+    &.is-right {
+      justify-content: flex-end;
+    }
+
+    &.is-center {
+      justify-content: center;
+    }
+
+    &.is-left {
+      justify-content: flex-start;
+    }
+  }
+}

@@ -1,0 +1,126 @@
+@use "../../globalStyles" as *;
+
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: $radius_md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: inherit;
+
+  // ─── Sizes ───────────────────────────────────────────────
+  &.size-sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: $font_xs;
+  }
+
+  &.size-md {
+    height: 40px;
+    padding: 0 18px;
+    font-size: $font_s;
+  }
+
+  &.size-lg {
+    height: 48px;
+    padding: 0 24px;
+    font-size: $font_sm;
+  }
+
+  // ─── Variants ────────────────────────────────────────────
+  &.primary {
+    @include brand-gradient;
+    color: $primary_white;
+    box-shadow: 0 4px 14px rgba(108, 71, 255, 0.35);
+
+    &:hover:not(:disabled) {
+      opacity: 0.88;
+      box-shadow: 0 6px 18px rgba(108, 71, 255, 0.45);
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  &.secondary {
+    background: $brand_color_light;
+    color: $brand_color;
+    border: 1px solid rgba(108, 71, 255, 0.2);
+
+    &:hover:not(:disabled) {
+      background: darken(#ede8ff, 4%);
+    }
+  }
+
+  &.danger {
+    background: $danger_light;
+    color: $danger;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+
+    &:hover:not(:disabled) {
+      background: $danger;
+      color: $primary_white;
+    }
+  }
+
+  &.ghost {
+    background: transparent;
+    color: $primary_text;
+    border: 1px solid $primary_border;
+    box-shadow: $shadow_sm;
+
+    &:hover:not(:disabled) {
+      background: $primary_bg;
+      border-color: $brand_color;
+      color: $brand_color;
+    }
+  }
+
+  &.outline {
+    background: transparent;
+    color: $brand_color;
+    border: 1.5px solid $brand_color;
+
+    &:hover:not(:disabled) {
+      background: $brand_color;
+      color: $primary_white;
+    }
+  }
+
+  // ─── Disabled / Loading ──────────────────────────────────
+  &:disabled,
+  &.loading {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+  }
+
+  // ─── Spinner ─────────────────────────────────────────────
+  .btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes btn-spin {
+    to { transform: rotate(360deg); }
+  }
+}

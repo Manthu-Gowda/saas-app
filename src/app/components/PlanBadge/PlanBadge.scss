@@ -1,0 +1,35 @@
+@use "../../globalStyles" as *;
+
+.plan-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: $font_xs;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+
+  &--FREE {
+    background: rgba(148, 163, 184, 0.15);
+    color: $plan_free;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  &--STARTER {
+    background: $success_light;
+    color: darken(#10b981, 10%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  &--PRO {
+    background: $brand_color_light;
+    color: $brand_color;
+    border: 1px solid rgba(108, 71, 255, 0.3);
+  }
+
+  &--BUSINESS {
+    background: $warning_light;
+    color: darken(#f59e0b, 15%);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+  }
+}

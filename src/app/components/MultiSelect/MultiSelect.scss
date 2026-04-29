@@ -1,0 +1,69 @@
+@use "../../globalStyles" as *;
+
+.forminput {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%;
+
+  .input-label {
+    font-size: $font_s;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: $primary_text;
+  }
+
+  .required-asterisk {
+    color: $danger;
+    margin-left: 2px;
+  }
+
+  .input-container {
+    .multi-select {
+      width: 100%;
+
+      .ant-select-selector {
+        border-radius: $radius_md !important;
+        border-color: $primary_border !important;
+        box-shadow: $shadow_sm !important;
+        min-height: 44px !important;
+        padding: 4px 8px !important;
+      }
+
+      .ant-select-selection-item {
+        background: $brand_color_light;
+        border-color: $brand_color;
+        color: $brand_color_dark;
+        border-radius: 6px;
+        font-size: $font_xs;
+      }
+
+      &:hover .ant-select-selector {
+        border-color: $brand_color !important;
+      }
+
+      &.ant-select-focused .ant-select-selector {
+        border-color: $brand_color !important;
+        box-shadow: 0 0 0 2px rgba(108, 71, 255, 0.15) !important;
+      }
+    }
+  }
+
+  .input-error-text {
+    color: $danger;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  .input-helper-text {
+    color: $secondary_text;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  &.has-error {
+    .ant-select-selector {
+      border-color: $danger !important;
+    }
+  }
+}

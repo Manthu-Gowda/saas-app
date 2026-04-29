@@ -1,0 +1,63 @@
+// ─── Brand Colors ──────────────────────────────────────────
+$brand_color: #6c47ff;       // Primary purple
+$brand_color_dark: #4f32cc;
+$brand_color_light: #ede8ff;
+
+$accent_color: #00c2a8;      // Teal accent
+$accent_light: #e0faf7;
+
+$primary_white: #ffffff;
+$primary_black: #000000;
+
+// ─── Text ──────────────────────────────────────────────────
+$primary_text: #0f172a;
+$secondary_text: #64748b;
+$muted_text: #94a3b8;
+
+// ─── Backgrounds ───────────────────────────────────────────
+$primary_bg: #f1f5f9;
+$sidebar_bg: #0f172a;
+$sidebar_active: #6c47ff;
+$card_bg: #ffffff;
+
+// ─── Borders & Strokes ─────────────────────────────────────
+$primary_border: #e2e8f0;
+$primary_stroke: #e2e8f0;
+
+// ─── Status Colors ─────────────────────────────────────────
+$success: #10b981;
+$success_light: #d1fae5;
+$warning: #f59e0b;
+$warning_light: #fef3c7;
+$danger: #ef4444;
+$danger_light: #fee2e2;
+$info: #3b82f6;
+$info_light: #dbeafe;
+
+// ─── Plan Badge Colors ─────────────────────────────────────
+$plan_free: #94a3b8;
+$plan_starter: #10b981;
+$plan_pro: #6c47ff;
+$plan_business: #f59e0b;
+
+// ─── Font Sizes ────────────────────────────────────────────
+$font_xxl: 32px;
+$font_xl: 24px;
+$font_l: 20px;
+$font_m: 18px;
+$font_sm: 16px;
+$font_s: 14px;
+$font_xs: 12px;
+$font_vs: 10px;
+$font_xvs: 8px;
+
+// ─── Radius ────────────────────────────────────────────────
+$radius_sm: 8px;
+$radius_md: 12px;
+$radius_lg: 16px;
+$radius_xl: 24px;
+
+// ─── Shadows ───────────────────────────────────────────────
+$shadow_sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow_md: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow_lg: 0 10px 30px rgba(0, 0, 0, 0.1);

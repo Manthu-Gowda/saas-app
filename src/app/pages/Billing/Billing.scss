@@ -1,0 +1,155 @@
+@use "../../globalStyles" as *;
+
+.billing-page {
+  .current-plan-card {
+    @include card;
+    @include flex-between;
+    padding: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    &__info {
+      h3 {
+        font-size: $font_s;
+        color: $secondary_text;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 12px 0;
+      }
+
+      .plan-name-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+
+        .plan-name {
+          font-size: $font_xl;
+          font-weight: 800;
+          color: $primary_text;
+        }
+      }
+
+      p {
+        font-size: $font_s;
+        color: $secondary_text;
+        margin: 0;
+      }
+    }
+  }
+
+  .pricing-section {
+    .pricing-title {
+      font-size: $font_xl;
+      font-weight: 700;
+      color: $primary_text;
+      text-align: center;
+      margin: 0 0 8px 0;
+    }
+
+    .pricing-subtitle {
+      font-size: $font_s;
+      color: $secondary_text;
+      text-align: center;
+      margin: 0 0 40px 0;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      @include tablet {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    .pricing-card {
+      @include card;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s ease;
+
+      &.is-popular {
+        border-color: $brand_color;
+        box-shadow: 0 8px 24px rgba(108, 71, 255, 0.15);
+        transform: translateY(-4px);
+      }
+
+      .popular-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: $brand_color;
+        color: $primary_white;
+        font-size: $font_xs;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 999px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      &__header {
+        padding: 32px 24px 24px;
+        border-bottom: 1px solid $primary_border;
+        text-align: center;
+
+        .price-block {
+          margin: 20px 0 8px;
+
+          .price {
+            font-size: 40px;
+            font-weight: 800;
+            color: $primary_text;
+          }
+
+          .interval {
+            font-size: $font_s;
+            color: $secondary_text;
+          }
+        }
+
+        .plan-title {
+          font-size: $font_s;
+          font-weight: 600;
+          color: $secondary_text;
+          margin: 0;
+        }
+      }
+
+      &__features {
+        padding: 24px;
+        flex: 1;
+
+        .feature-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          margin-bottom: 16px;
+
+          .check-icon {
+            color: $success;
+            margin-top: 3px;
+          }
+
+          span {
+            font-size: $font_s;
+            color: $primary_text;
+            line-height: 1.5;
+          }
+        }
+      }
+
+      &__footer {
+        padding: 24px;
+        padding-top: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@use "../../globalStyles" as *;
+
+.custom-table-wrapper {
+  width: 100%;
+
+  .custom-table {
+    .ant-table-thead {
+      th.ant-table-cell {
+        background: $primary_bg;
+        color: $primary_text;
+        font-weight: 600;
+        font-size: $font_xs;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid $primary_border;
+        padding: 10px 12px;
+      }
+    }
+
+    .ant-table-tbody {
+      td.ant-table-cell {
+        font-size: $font_s;
+        color: $primary_text;
+        border-bottom: 1px solid $primary_border;
+        padding: 10px 12px;
+      }
+
+      tr.ant-table-row:hover td {
+        background: $brand_color_light !important;
+      }
+    }
+
+    .ant-table-pagination {
+      margin: 12px 0 0 !important;
+    }
+
+    .ant-pagination-item-active {
+      border-color: $brand_color !important;
+
+      a {
+        color: $brand_color !important;
+      }
+    }
+  }
+}

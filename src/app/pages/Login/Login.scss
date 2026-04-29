@@ -1,0 +1,170 @@
+@use "../../globalStyles" as *;
+
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: $primary_bg;
+
+  @include mobile {
+    flex-direction: column;
+  }
+
+  &__left {
+    flex: 1;
+    background: linear-gradient(135deg, $sidebar_bg 0%, #1e293b 100%);
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: $primary_white;
+    position: relative;
+    overflow: hidden;
+
+    @include tablet {
+      display: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(108, 71, 255, 0.15) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      border-radius: 50%;
+    }
+  }
+
+  &__brand {
+    @include flex-start;
+    gap: 12px;
+    margin-bottom: 40px;
+
+    &-icon {
+      font-size: 32px;
+    }
+
+    &-name {
+      font-size: $font_xl;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  &__headline {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    max-width: 500px;
+  }
+
+  &__sub {
+    font-size: $font_l;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    margin-bottom: 60px;
+    max-width: 480px;
+  }
+
+  &__stats {
+    display: flex;
+    gap: 40px;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &-value {
+      font-size: $font_xl;
+      font-weight: 700;
+      color: $brand_color_light;
+    }
+
+    &-label {
+      font-size: $font_s;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  &__right {
+    flex: 1;
+    @include flex-center;
+    padding: 20px;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: $card_bg;
+  border-radius: $radius_xl;
+  padding: 40px;
+  box-shadow: $shadow_lg;
+  border: 1px solid $primary_border;
+
+  @include mobile {
+    padding: 30px 20px;
+  }
+
+  &__header {
+    margin-bottom: 32px;
+    text-align: center;
+
+    h2 {
+      font-size: $font_xl;
+      font-weight: 700;
+      color: $primary_text;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: $secondary_text;
+      font-size: $font_s;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__forgot {
+    text-align: right;
+    margin-bottom: 24px;
+
+    a {
+      font-size: $font_s;
+      color: $brand_color;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  &__footer {
+    text-align: center;
+    font-size: $font_s;
+    color: $secondary_text;
+    padding-top: 24px;
+    border-top: 1px solid $primary_border;
+
+    a {
+      font-weight: 600;
+      margin-left: 4px;
+    }
+  }
+}

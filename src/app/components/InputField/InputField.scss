@@ -1,0 +1,68 @@
+@use "../../globalStyles" as *;
+
+.forminput {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%;
+
+  .input-label {
+    font-size: $font_s;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: $primary_text;
+  }
+
+  .required-asterisk {
+    color: $danger;
+    margin-left: 2px;
+  }
+
+  .helperTitle {
+    color: $secondary_text;
+    font-size: $font_xs;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  .input-container {
+    .input {
+      font-size: $font_s;
+      box-shadow: $shadow_sm;
+      color: $primary_text;
+      height: 44px;
+      border-radius: $radius_md;
+      border-color: $primary_border;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        border-color: $brand_color;
+      }
+
+      &::placeholder {
+        color: $muted_text;
+      }
+    }
+  }
+
+  .input-error-text {
+    color: $danger;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  .input-helper-text {
+    color: $secondary_text;
+    font-size: $font_xs;
+    margin-top: 4px;
+  }
+
+  &.has-error {
+    .input {
+      border-color: $danger !important;
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15) !important;
+      }
+    }
+  }
+}

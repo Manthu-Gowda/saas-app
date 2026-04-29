@@ -1,0 +1,181 @@
+@use "../../globalStyles" as *;
+
+.customer-dashboard {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 20px;
+  }
+
+  .dash-card {
+    @include card;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+      @include flex-between;
+      margin-bottom: 20px;
+
+      h3 {
+        font-size: $font_m;
+        font-weight: 700;
+        color: $primary_text;
+        margin: 0;
+      }
+    }
+
+    &__badge {
+      background: $brand_color_light;
+      color: $brand_color;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: $font_xs;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .usage-card {
+    grid-column: span 8;
+    @include tablet {
+      grid-column: span 12;
+    }
+
+    .usage-stats {
+      margin-bottom: 20px;
+    }
+
+    .usage-numbers {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+
+      .usage-current {
+        font-size: 36px;
+        font-weight: 800;
+        color: $primary_text;
+      }
+      .usage-divider {
+        font-size: $font_l;
+        color: $secondary_text;
+      }
+      .usage-total {
+        font-size: $font_l;
+        font-weight: 600;
+        color: $secondary_text;
+      }
+    }
+
+    .usage-label {
+      font-size: $font_s;
+      color: $secondary_text;
+      margin-top: 4px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: $primary_border;
+      border-radius: 999px;
+      overflow: hidden;
+
+      .progress-fill {
+        height: 100%;
+        background: $brand_color;
+        border-radius: 999px;
+        transition: width 0.5s ease;
+      }
+    }
+
+    .usage-warning {
+      margin-top: 12px;
+      font-size: $font_xs;
+      color: $danger;
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .action-btn {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
+  .dash-card:not(.usage-card):not(.activity-card) {
+    grid-column: span 4;
+    @include tablet {
+      grid-column: span 12;
+    }
+  }
+
+  .activity-card {
+    grid-column: span 12;
+
+    .view-all-btn {
+      background: none;
+      border: none;
+      color: $brand_color;
+      font-size: $font_s;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      border-radius: $radius_md;
+      background: $primary_bg;
+
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: $radius_sm;
+        background: $primary_white;
+        border: 1px solid $primary_border;
+        @include flex-center;
+        color: $brand_color;
+        font-size: 18px;
+      }
+
+      .activity-details {
+        h4 {
+          font-size: $font_s;
+          font-weight: 600;
+          color: $primary_text;
+          margin: 0 0 4px 0;
+        }
+
+        p {
+          font-size: $font_xs;
+          color: $secondary_text;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
