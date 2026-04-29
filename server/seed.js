@@ -8,12 +8,12 @@ import User from './models/User.js';
 dotenv.config();
 
 const INDUSTRIES = [
-  { name: 'Legal', slug: 'legal', icon: '⚖️', description: 'Contract review, clause generation & legal document analysis', color: '#6c47ff', sortOrder: 1 },
-  { name: 'HR', slug: 'hr', icon: '👥', description: 'Job descriptions, resume screening & performance reviews', color: '#3b82f6', sortOrder: 2 },
-  { name: 'E-commerce', slug: 'ecommerce', icon: '🛍️', description: 'Product descriptions, ad copy & email campaigns', color: '#10b981', sortOrder: 3 },
-  { name: 'Real Estate', slug: 'real-estate', icon: '🏠', description: 'Property listings, client follow-ups & market reports', color: '#f59e0b', sortOrder: 4 },
-  { name: 'Finance', slug: 'finance', icon: '💰', description: 'Financial report summaries, invoices & risk assessments', color: '#ef4444', sortOrder: 5 },
-  { name: 'Marketing', slug: 'marketing', icon: '📢', description: 'Blog posts, social media content & email sequences', color: '#ec4899', sortOrder: 6 },
+  { name: 'Legal', slug: 'legal', description: 'Contract review, clause generation & legal document analysis', color: '#6c47ff', sortOrder: 1 },
+  { name: 'HR', slug: 'hr', description: 'Job descriptions, resume screening & performance reviews', color: '#3b82f6', sortOrder: 2 },
+  { name: 'E-commerce', slug: 'ecommerce', description: 'Product descriptions, ad copy & email campaigns', color: '#10b981', sortOrder: 3 },
+  { name: 'Real Estate', slug: 'real-estate', description: 'Property listings, client follow-ups & market reports', color: '#f59e0b', sortOrder: 4 },
+  { name: 'Finance', slug: 'finance', description: 'Financial report summaries, invoices & risk assessments', color: '#ef4444', sortOrder: 5 },
+  { name: 'Marketing', slug: 'marketing', description: 'Blog posts, social media content & email sequences', color: '#ec4899', sortOrder: 6 },
 ];
 
 const buildTools = (industries) => {
@@ -24,7 +24,6 @@ const buildTools = (industries) => {
     {
       name: 'Contract Reviewer',
       slug: 'contract-reviewer',
-      icon: '📄',
       description: 'Analyze contracts for risks, key obligations, and red flags.',
       industryId: bySlug('legal'),
       systemPrompt: 'You are a senior legal AI assistant with expertise in contract law. Your job is to analyze contracts and provide clear, actionable insights. Always identify risks, key obligations, and important clauses. Use structured headings with markdown. Be precise and professional.',
@@ -49,7 +48,6 @@ Contract Text:
     {
       name: 'Legal Clause Generator',
       slug: 'legal-clause-generator',
-      icon: '✍️',
       description: 'Draft precise, enforceable legal clauses with plain-English explanations.',
       industryId: bySlug('legal'),
       systemPrompt: 'You are an expert legal drafter specializing in commercial contracts. You produce precise, enforceable legal clauses that are clear and unambiguous. Always include a plain-English explanation after each clause.',
@@ -77,7 +75,6 @@ Provide:
     {
       name: 'Legal Document Summarizer',
       slug: 'legal-doc-summarizer',
-      icon: '📋',
       description: 'Translate complex legal documents into clear, accessible summaries.',
       industryId: bySlug('legal'),
       systemPrompt: 'You are a legal analyst who translates complex legal documents into clear, accessible summaries. You preserve all important details while making the content understandable to non-lawyers.',
@@ -108,7 +105,6 @@ Provide:
     {
       name: 'Job Description Writer',
       slug: 'job-description-writer',
-      icon: '💼',
       description: 'Write compelling, inclusive job descriptions that attract top talent.',
       industryId: bySlug('hr'),
       systemPrompt: 'You are an experienced HR professional and talent acquisition specialist. You write compelling, inclusive job descriptions that attract qualified candidates. You use benefits-focused language, avoid jargon, and ensure job posts are gender-neutral and accessible.',
@@ -141,7 +137,6 @@ Include: Job title, overview paragraph, responsibilities (6-8 bullets), requirem
     {
       name: 'Resume Screener',
       slug: 'resume-screener',
-      icon: '🔍',
       description: 'Evaluate resumes against job requirements with structured, fair assessments.',
       industryId: bySlug('hr'),
       systemPrompt: 'You are a senior HR recruiter with 15+ years of experience. You evaluate resumes objectively and provide structured, fair assessments. You consider both hard skills and soft skills. You provide actionable hiring recommendations.',
@@ -171,7 +166,6 @@ Provide:
     {
       name: 'Interview Question Generator',
       slug: 'interview-question-generator',
-      icon: '❓',
       description: 'Generate targeted, insightful interview questions using STAR methodology.',
       industryId: bySlug('hr'),
       systemPrompt: 'You are an expert in talent assessment and behavioral interviewing. You create targeted, insightful interview questions that reveal a candidate\'s true capabilities, problem-solving skills, and cultural fit. You use the STAR method for behavioral questions.',
@@ -201,7 +195,6 @@ Provide 12 questions organized as:
     {
       name: 'Performance Review Writer',
       slug: 'performance-review-writer',
-      icon: '⭐',
       description: 'Write constructive, balanced performance reviews that motivate employees.',
       industryId: bySlug('hr'),
       systemPrompt: 'You are an HR coach specializing in performance management. You help managers write constructive, balanced, and professional performance reviews that motivate employees and provide clear development paths.',
@@ -232,7 +225,6 @@ Write in a professional yet empathetic tone. Include: overall performance summar
     {
       name: 'Product Description Writer',
       slug: 'product-description-writer',
-      icon: '🛒',
       description: 'Write high-converting, SEO-optimized product descriptions that sell.',
       industryId: bySlug('ecommerce'),
       systemPrompt: 'You are a conversion copywriter specializing in e-commerce. You write product descriptions that sell by focusing on benefits over features, addressing customer pain points, and creating desire. Your copy is SEO-optimized, scannable, and persuasive.',
@@ -269,7 +261,6 @@ Provide:
     {
       name: 'Ad Copy Generator',
       slug: 'ad-copy-generator',
-      icon: '📣',
       description: 'Generate platform-specific ad copy variations for A/B testing.',
       industryId: bySlug('ecommerce'),
       systemPrompt: 'You are a performance marketing expert who writes ad copy that drives clicks and conversions. You understand platform-specific character limits, hooks, and psychological triggers. You write ad variations that can be A/B tested.',
@@ -301,7 +292,6 @@ For each variation provide: **Headline**, **Primary text** (within platform limi
     {
       name: 'Customer Review Responder',
       slug: 'customer-review-responder',
-      icon: '⭐',
       description: 'Craft professional, empathetic responses to customer reviews.',
       industryId: bySlug('ecommerce'),
       systemPrompt: 'You are a customer experience specialist who crafts professional, empathetic responses to customer reviews. You turn negative reviews into opportunities, amplify positive reviews, and always maintain brand voice. Responses are authentic, not robotic.',
@@ -330,7 +320,6 @@ Response should: Be personalized, show empathy, address the main point, resolve 
     {
       name: 'Property Listing Generator',
       slug: 'property-listing-generator',
-      icon: '🏡',
       description: 'Create compelling property listings that generate inquiries and drive viewings.',
       industryId: bySlug('real-estate'),
       systemPrompt: 'You are a real estate copywriter who creates compelling property listings that generate inquiries. You paint vivid pictures with words, highlight lifestyle benefits, and create FOMO. Your listings are accurate, evocative, and optimized for property portals.',
@@ -371,7 +360,6 @@ Provide:
     {
       name: 'Client Follow-up Email',
       slug: 'real-estate-followup-email',
-      icon: '✉️',
       description: 'Write warm, professional follow-up emails that move relationships forward.',
       industryId: bySlug('real-estate'),
       systemPrompt: 'You are a top real estate agent known for your client relationship skills. You write follow-up emails that are warm, professional, timely, and always move the relationship forward. You know the right balance of persistence and patience.',
@@ -400,7 +388,6 @@ Write a concise (under 200 words), warm, professional email that feels personal 
     {
       name: 'Market Report Writer',
       slug: 'market-report-writer',
-      icon: '📊',
       description: 'Create data-driven real estate market reports with actionable insights.',
       industryId: bySlug('real-estate'),
       systemPrompt: 'You are a real estate market analyst who writes clear, data-driven market reports for clients. You translate market data into actionable insights that help buyers, sellers, and investors make confident decisions.',
@@ -435,7 +422,6 @@ Provide:
     {
       name: 'Financial Report Summarizer',
       slug: 'financial-report-summarizer',
-      icon: '📈',
       description: 'Distill complex financial reports into clear, decision-ready summaries.',
       industryId: bySlug('finance'),
       systemPrompt: 'You are a senior financial analyst who distills complex financial reports into clear, decision-ready summaries. You identify what matters most — revenue trends, margin changes, cash position, risk factors — and explain them without jargon.',
@@ -467,7 +453,6 @@ Provide:
     {
       name: 'Invoice & Payment Terms Generator',
       slug: 'invoice-generator',
-      icon: '🧾',
       description: 'Generate professional invoices and legally sound payment terms.',
       industryId: bySlug('finance'),
       systemPrompt: 'You are a finance professional who creates clear, professional invoices and payment documentation. You ensure payment terms are legally sound, clearly communicated, and protect the service provider while being fair to clients.',
@@ -498,7 +483,6 @@ Provide: Itemized invoice table, professional payment terms language, late payme
     {
       name: 'Risk Assessment Report',
       slug: 'risk-assessment-report',
-      icon: '⚠️',
       description: 'Generate structured financial risk assessments with mitigation strategies.',
       industryId: bySlug('finance'),
       systemPrompt: 'You are a risk management professional with expertise in financial risk analysis. You provide structured, objective risk assessments that help organizations understand their exposure and take informed mitigation steps.',
@@ -531,7 +515,6 @@ Provide:
     {
       name: 'Blog Post Writer',
       slug: 'blog-post-writer',
-      icon: '✍️',
       description: 'Write engaging, SEO-optimized blog posts that rank and drive traffic.',
       industryId: bySlug('marketing'),
       systemPrompt: 'You are an expert content marketer and SEO specialist. You write engaging, well-researched blog posts that rank on Google and genuinely help readers. Your writing has a clear structure, uses storytelling, and balances education with entertainment. You integrate keywords naturally.',
@@ -569,7 +552,6 @@ Structure:
     {
       name: 'Social Media Content Generator',
       slug: 'social-media-generator',
-      icon: '📱',
       description: 'Create platform-native posts that drive engagement and build brand presence.',
       industryId: bySlug('marketing'),
       systemPrompt: 'You are a social media strategist who creates platform-native content that drives engagement. You understand each platform\'s culture, algorithms, and best practices. You write posts that feel authentic, not corporate, and always include a reason to engage.',
@@ -603,7 +585,6 @@ For each post:
     {
       name: 'Email Marketing Sequence',
       slug: 'email-marketing-sequence',
-      icon: '📧',
       description: 'Write complete email sequences that nurture leads and drive conversions.',
       industryId: bySlug('marketing'),
       systemPrompt: 'You are an email marketing strategist specializing in lifecycle email campaigns. You write sequences that nurture leads, convert prospects, and retain customers. Every email in your sequences has a single clear purpose and moves the reader toward the next step.',

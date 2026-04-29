@@ -34,7 +34,7 @@ const AdminToolDetail = () => {
   const isNew = toolId === "new";
 
   const [form, setForm] = useState({
-    name: "", slug: "", icon: "🤖", description: "",
+    name: "", slug: "", description: "",
     industryId: "", aiProviderId: "",
     systemPrompt: "", userPromptTemplate: "",
     planRequired: "FREE", outputFormat: "markdown",
@@ -64,7 +64,6 @@ const AdminToolDetail = () => {
           setForm({
             name: data.name || "",
             slug: data.slug || "",
-            icon: data.icon || "🤖",
             description: data.description || "",
             industryId: data.industryId?._id || data.industryId || "",
             aiProviderId: data.aiProviderId?._id || data.aiProviderId || "",
@@ -126,7 +125,6 @@ const AdminToolDetail = () => {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
           <InputField title="Tool Name *" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Contract Reviewer" />
           <InputField title="Slug * (URL-safe)" name="slug" value={form.slug} onChange={handleChange} placeholder="e.g. contract-reviewer" />
-          <InputField title="Icon (emoji)" name="icon" value={form.icon} onChange={handleChange} placeholder="🤖" />
           <InputField title="Description" name="description" value={form.description} onChange={handleChange} placeholder="Brief description" />
           <SelectInput title="Industry *" value={form.industryId || undefined} onChange={(v) => handleSelect("industryId", v)} options={industries} required placeholder="Select industry" allowClear={false} />
           <SelectInput title="AI Provider Override" value={form.aiProviderId || undefined} onChange={(v) => handleSelect("aiProviderId", v)} options={providers} placeholder="Platform Default" />

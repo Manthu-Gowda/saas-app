@@ -43,6 +43,10 @@ const AdminTools = () => {
     finally { setDeleting(false); }
   };
 
+  const handleAddTool = () => {
+    navigate("/admin/tools/new");
+  };
+
   const toggleStatus = async (tool) => {
     try {
       await axiosInstance.patch(ADMIN_UPDATE_TOOL(tool._id), {
@@ -138,6 +142,10 @@ const AdminTools = () => {
         title="AI Tools Management"
         subTitle={`${data.length} tools configured across all industries.`}
         showBack={false}
+        showRight
+        rightActionLabel="Add Tool"
+        rightActionIcon={<PlusOutlined />}
+        onRightClick={handleAddTool}
       />
 
       <div style={{ display: "flex", gap: "16px", marginBottom: "20px", alignItems: "flex-end" }}>

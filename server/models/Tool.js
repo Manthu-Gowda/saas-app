@@ -14,7 +14,6 @@ const toolSchema = new mongoose.Schema(
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     description: { type: String },
-    icon: { type: String, default: '🤖' },
     industryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Industry', required: true },
     systemPrompt: { type: String, default: '' },
     userPromptTemplate: { type: String, default: '' },

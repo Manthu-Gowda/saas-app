@@ -10,7 +10,7 @@ import { successToast, errorToast } from "../../services/ToastHelper";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Tooltip, Switch } from "antd";
 
-const defaultForm = { name: "", slug: "", icon: "🏢", description: "", color: "#6c47ff" };
+const defaultForm = { name: "", slug: "", description: "", color: "#6c47ff" };
 
 const AdminIndustries = () => {
   const [data, setData] = useState([]);
@@ -36,7 +36,7 @@ const AdminIndustries = () => {
   const openCreate = () => { setEditTarget(null); setForm(defaultForm); setShowModal(true); };
   const openEdit = (ind) => {
     setEditTarget(ind);
-    setForm({ name: ind.name, slug: ind.slug, icon: ind.icon, description: ind.description || "", color: ind.color || "#6c47ff" });
+    setForm({ name: ind.name, slug: ind.slug, description: ind.description || "", color: ind.color || "#6c47ff" });
     setShowModal(true);
   };
 
@@ -81,14 +81,6 @@ const AdminIndustries = () => {
   };
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "icon",
-      key: "icon",
-      width: 60,
-      align: "center",
-      render: (icon) => <span style={{ fontSize: "22px" }}>{icon}</span>,
-    },
     {
       title: "Industry",
       key: "name",
@@ -141,7 +133,6 @@ const AdminIndustries = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <InputField title="Name *" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Legal" />
           <InputField title="Slug *" name="slug" value={form.slug} onChange={handleChange} placeholder="e.g. legal" />
-          <InputField title="Icon (emoji)" name="icon" value={form.icon} onChange={handleChange} placeholder="⚖️" />
           <InputField title="Color (hex)" name="color" value={form.color} onChange={handleChange} placeholder="#6c47ff" />
           <InputField title="Description" name="description" value={form.description} onChange={handleChange} placeholder="Brief description..." />
         </div>
@@ -149,8 +140,9 @@ const AdminIndustries = () => {
 
       <CustomModal open={Boolean(deleteTarget)} title="Delete Industry"
         onClose={() => setDeleteTarget(null)} primaryText="Delete" dangerText="Cancel"
-        onPrimary={handleDelete} primaryProps={{ variant: "danger", loading: deleting }}>
-        <p>Delete <strong>{deleteTarget?.name}</strong>? All associated tools will be affected.</p>
+        onPrimary={handleDelete}
+      >
+        <p>Are you sure you want to delete the industry "<strong>{deleteTarget?.name}</strong>"? All associated tools will be affected.</p>
       </CustomModal>
     </div>
   );
