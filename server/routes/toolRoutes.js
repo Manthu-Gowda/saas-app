@@ -1,7 +1,11 @@
 import express from 'express';
 import multer from 'multer';
-import pdfParse from 'pdf-parse';
+import { createRequire } from 'module';
 import { getToolsByIndustry, runTool, getToolBySlug } from '../controllers/toolController.js';
+
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
+
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

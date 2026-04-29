@@ -57,10 +57,14 @@
 
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
 
       @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 600px) {
         grid-template-columns: 1fr;
         max-width: 400px;
         margin: 0 auto;
@@ -80,6 +84,11 @@
         transform: translateY(-4px);
       }
 
+      &.is-current {
+        border-color: #10b981;
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
+      }
+
       .popular-badge {
         position: absolute;
         top: -12px;
@@ -87,6 +96,10 @@
         transform: translateX(-50%);
         background: $brand_color;
         color: $primary_white;
+
+        &.current-badge {
+          background: #10b981;
+        }
         font-size: $font_xs;
         font-weight: 700;
         padding: 4px 12px;

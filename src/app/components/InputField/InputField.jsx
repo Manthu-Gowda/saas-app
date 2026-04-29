@@ -1,6 +1,6 @@
 import React from "react";
 import "./InputField.scss";
-import { Input } from "antd";
+import { Input, Space } from "antd";
 
 const InputField = ({
   title,

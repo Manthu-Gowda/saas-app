@@ -1,21 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import SubHeader from "../../components/SubHeader/SubHeader";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import PlanBadge from "../../components/PlanBadge/PlanBadge";
 import InputField from "../../components/InputField/InputField";
+import SelectInput from "../../components/SelectInput/SelectInput";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
-import { SearchOutlined, EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import axiosInstance from "../../services/axiosInstance";
+import { ADMIN_GET_USERS } from "../../utils/apiPath";
+import { errorToast } from "../../services/ToastHelper";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import "./AdminUsers.scss";
 
-// Dummy data
-const MOCK_USERS = [
-  { id: "1", name: "Alice Smith", email: "alice@acme.com", plan: "PRO", status: "active", joined: "2026-01-15" },
-  { id: "2", name: "Bob Jones", email: "bob@realestate.com", plan: "BUSINESS", status: "active", joined: "2026-02-20" },
-  { id: "3", name: "Charlie Brown", email: "charlie@gmail.com", plan: "FREE", status: "inactive", joined: "2026-03-05" },
-  { id: "4", name: "Diana Prince", email: "diana@amazon.com", plan: "PRO", status: "suspended", joined: "2026-04-10" },
+const STATUS_OPTIONS = [
+  { label: "All Status", value: "" },
+  { label: "Active", value: "active" },
+  { label: "Suspended", value: "suspended" },
+  { label: "Inactive", value: "inactive" },
+];
+
+const PLAN_OPTIONS = [
+  { label: "All Plans", value: "" },
+  { label: "Free", value: "FREE" },
+  { label: "Starter", value: "STARTER" },
+  { label: "Pro", value: "PRO" },
+  { label: "Business", value: "BUSINESS" },
 ];
 
 const AdminUsers = () => {
@@ -23,19 +34,33 @@ const AdminUsers = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [planFilter, setPlanFilter] = useState("");
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ page, limit: 25 });
+      if (search) params.append("search", search);
+      if (statusFilter) params.append("status", statusFilter);
+      if (planFilter) params.append("plan", planFilter);
+
+      const { data: res } = await axiosInstance.get(`${ADMIN_GET_USERS}?${params}`);
+      setData(res.users || []);
+      setTotal(res.total || 0);
+    } catch {
+      errorToast("Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  }, [search, statusFilter, planFilter, page]);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setData(MOCK_USERS);
-      setLoading(false);
-    }, 600);
-  }, []);
-
-  const filteredData = data.filter((u) => 
-    u.name.toLowerCase().includes(search.toLowerCase()) || 
-    u.email.toLowerCase().includes(search.toLowerCase())
-  );
+    const timer = setTimeout(fetchUsers, 300);
+    return () => clearTimeout(timer);
+  }, [fetchUsers]);
 
   const columns = [
     {
@@ -44,7 +69,7 @@ const AdminUsers = () => {
       key: "name",
       render: (text, record) => (
         <div className="user-name-cell">
-          <div className="user-avatar">{text.charAt(0)}</div>
+          <div className="user-avatar">{(text || "U").charAt(0).toUpperCase()}</div>
           <div>
             <div className="user-name">{text}</div>
             <div className="user-email">{record.email}</div>
@@ -53,79 +78,107 @@ const AdminUsers = () => {
       ),
     },
     {
+      title: "Industry",
+      key: "industry",
+      render: (_, record) => (
+        <span>{record.industryId?.icon} {record.industryId?.name || "—"}</span>
+      ),
+    },
+    {
       title: "Plan",
-      dataIndex: "plan",
-      key: "plan",
-      width: 150,
+      dataIndex: "planTier",
+      key: "planTier",
+      width: 130,
       render: (plan) => <PlanBadge tier={plan} />,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 150,
+      width: 130,
       render: (status) => <StatusBadge status={status} />,
     },
     {
-      title: "Joined Date",
-      dataIndex: "joined",
-      key: "joined",
-      width: 150,
+      title: "Runs",
+      key: "runs",
+      width: 120,
+      render: (_, r) => (
+        <span style={{ fontSize: "12px", color: "#64748b" }}>
+          {r.runsUsed} / {r.runsTotal === -1 ? "∞" : r.runsTotal}
+        </span>
+      ),
+    },
+    {
+      title: "Joined",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: 120,
+      render: (d) => new Date(d).toLocaleDateString(),
     },
     {
       title: "Actions",
       key: "actions",
-      width: 150,
+      width: 100,
       align: "center",
       render: (_, record) => (
-        <div className="table-actions">
-          <Tooltip title="View Details">
-            <button className="action-btn" onClick={() => navigate(`/admin/users/${record.id}`)}>
-              <EyeOutlined />
-            </button>
-          </Tooltip>
-          <Tooltip title="Edit User">
-            <button className="action-btn edit-btn">
-              <EditOutlined />
-            </button>
-          </Tooltip>
-          <Tooltip title="Suspend/Delete">
-            <button className="action-btn delete-btn">
-              <DeleteOutlined />
-            </button>
-          </Tooltip>
-        </div>
+        <Tooltip title="View Details">
+          <button className="action-btn" onClick={() => navigate(`/admin/users/${record._id}`)}>
+            <EyeOutlined />
+          </button>
+        </Tooltip>
       ),
     },
   ];
 
   return (
     <div className="admin-users-page">
-      <SubHeader 
-        title="User Management" 
-        subTitle="Manage all customers and admins across the platform."
-        showRight={true}
-        rightActionLabel="Export Users"
-        onRightClick={() => {}}
-      >
-        <div style={{ width: "300px" }}>
+      <SubHeader
+        title="User Management"
+        subTitle={`${total} customers registered on the platform.`}
+        showBack={false}
+      />
+
+      <div className="admin-users-filters">
+        <div style={{ flex: 1, maxWidth: 320 }}>
           <InputField
             name="search"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search by name or email..."
             prefix={<SearchOutlined />}
           />
         </div>
-      </SubHeader>
+        <div style={{ width: 180 }}>
+          <SelectInput
+            name="status"
+            value={statusFilter || undefined}
+            onChange={(v) => { setStatusFilter(v || ""); setPage(1); }}
+            placeholder="Filter by status"
+            options={STATUS_OPTIONS}
+            allowClear
+          />
+        </div>
+        <div style={{ width: 180 }}>
+          <SelectInput
+            name="plan"
+            value={planFilter || undefined}
+            onChange={(v) => { setPlanFilter(v || ""); setPage(1); }}
+            placeholder="Filter by plan"
+            options={PLAN_OPTIONS}
+            allowClear
+          />
+        </div>
+      </div>
 
       <div className="admin-users-content">
         <CustomTable
-          rowKey="id"
+          rowKey="_id"
           columns={columns}
-          dataSource={filteredData}
+          dataSource={data}
           loading={loading}
-          total={filteredData.length}
+          total={total}
+          pageSize={25}
+          onPageChange={(p) => setPage(p)}
         />
       </div>
     </div>

@@ -1,96 +1,135 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SubHeader from "../../components/SubHeader/SubHeader";
 import CustomTable from "../../components/CustomTable/CustomTable";
-import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import PlanBadge from "../../components/PlanBadge/PlanBadge";
+import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import InputField from "../../components/InputField/InputField";
+import SelectInput from "../../components/SelectInput/SelectInput";
+import axiosInstance from "../../services/axiosInstance";
+import { ADMIN_GET_SUBSCRIPTIONS } from "../../utils/apiPath";
+import { errorToast } from "../../services/ToastHelper";
 import { SearchOutlined } from "@ant-design/icons";
 
-// Dummy data
-const MOCK_SUBS = [
-  { id: "sub_1", userName: "Alice Smith", email: "alice@acme.com", plan: "PRO", status: "active", nextBilling: "2026-05-15", amount: "$29.00" },
-  { id: "sub_2", userName: "Bob Jones", email: "bob@realestate.com", plan: "BUSINESS", status: "active", nextBilling: "2026-05-20", amount: "$99.00" },
-  { id: "sub_3", userName: "Charlie Brown", email: "charlie@gmail.com", plan: "PRO", status: "past_due", nextBilling: "2026-04-05", amount: "$29.00" },
+const PLAN_FILTER = [
+  { label: "All Plans", value: "" },
+  { label: "Free", value: "FREE" },
+  { label: "Starter", value: "STARTER" },
+  { label: "Pro", value: "PRO" },
+  { label: "Business", value: "BUSINESS" },
 ];
 
 const AdminSubscriptions = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [planFilter, setPlanFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const pageSize = 20;
 
-  useEffect(() => {
+  const fetchSubs = useCallback(async (pg = 1) => {
     setLoading(true);
-    setTimeout(() => {
-      setData(MOCK_SUBS);
-      setLoading(false);
-    }, 600);
-  }, []);
+    try {
+      const { data: res } = await axiosInstance.get(ADMIN_GET_SUBSCRIPTIONS, {
+        params: { page: pg, limit: pageSize, search, plan: planFilter || undefined },
+      });
+      const items = res.subscriptions || res.users || res;
+      setData(Array.isArray(items) ? items : []);
+      setTotal(res.total || items.length);
+    } catch { errorToast("Failed to load subscriptions"); }
+    finally { setLoading(false); }
+  }, [search, planFilter]);
 
-  const filteredData = data.filter((s) => 
-    s.userName.toLowerCase().includes(search.toLowerCase()) || 
-    s.email.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => { setPage(1); fetchSubs(1); }, [search, planFilter]);
+  useEffect(() => { if (page > 1) fetchSubs(page); }, [page]);
 
   const columns = [
     {
       title: "Subscriber",
-      dataIndex: "userName",
-      key: "userName",
-      render: (text, record) => (
+      key: "name",
+      render: (_, r) => (
         <div>
-          <div style={{ fontWeight: 600, color: "#0f172a" }}>{text}</div>
-          <div style={{ fontSize: "12px", color: "#64748b" }}>{record.email}</div>
+          <div style={{ fontWeight: 600, color: "#0f172a" }}>{r.name}</div>
+          <div style={{ fontSize: 12, color: "#94a3b8" }}>{r.email}</div>
         </div>
       ),
     },
     {
+      title: "Industry",
+      key: "industry",
+      render: (_, r) => r.industryId
+        ? <span>{r.industryId.icon} {r.industryId.name}</span>
+        : <span style={{ color: "#94a3b8" }}>—</span>,
+    },
+    {
       title: "Plan",
-      dataIndex: "plan",
       key: "plan",
-      render: (plan) => <PlanBadge tier={plan} />,
+      render: (_, r) => <PlanBadge tier={r.planTier || "FREE"} />,
     },
     {
       title: "Status",
-      dataIndex: "status",
       key: "status",
-      render: (status) => <StatusBadge status={status} />,
+      render: (_, r) => <StatusBadge status={r.status} />,
     },
     {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
+      title: "AI Runs",
+      key: "runs",
+      render: (_, r) => (
+        <span style={{ fontSize: 13 }}>
+          <strong style={{ color: "#0f172a" }}>{r.runsUsed}</strong>
+          <span style={{ color: "#94a3b8" }}> / {r.runsTotal === -1 ? "∞" : r.runsTotal}</span>
+        </span>
+      ),
     },
     {
-      title: "Next Billing",
-      dataIndex: "nextBilling",
-      key: "nextBilling",
+      title: "Joined",
+      key: "joined",
+      render: (_, r) => (
+        <span style={{ fontSize: 12, color: "#64748b" }}>
+          {new Date(r.createdAt).toLocaleDateString()}
+        </span>
+      ),
     },
   ];
 
   return (
-    <div className="admin-subs-page">
-      <SubHeader 
-        title="Subscriptions" 
-        subTitle="Monitor active subscriptions and recurring revenue."
-      >
-        <div style={{ width: "300px" }}>
+    <div>
+      <SubHeader
+        title="Subscriptions"
+        subTitle="Monitor user plans and AI run usage across the platform."
+        showBack={false}
+      />
+
+      <div style={{ display: "flex", gap: 12, marginBottom: 20, alignItems: "flex-end", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, maxWidth: 320 }}>
           <InputField
             name="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search subscriber..."
+            placeholder="Search by name or email..."
             prefix={<SearchOutlined />}
           />
         </div>
-      </SubHeader>
+        <div style={{ width: 180 }}>
+          <SelectInput
+            value={planFilter || undefined}
+            onChange={(v) => setPlanFilter(v || "")}
+            options={PLAN_FILTER}
+            placeholder="Filter by plan"
+          />
+        </div>
+      </div>
 
-      <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #e2e8f0", overflow: "hidden" }}>
+      <div style={{ background: "#fff", borderRadius: 16, border: "1px solid #e2e8f0", overflow: "hidden" }}>
         <CustomTable
-          rowKey="id"
+          rowKey="_id"
           columns={columns}
-          dataSource={filteredData}
+          dataSource={data}
           loading={loading}
-          total={filteredData.length}
+          total={total}
+          pageSize={pageSize}
+          pageIndex={page - 1}
+          onPageChange={(p) => setPage(p)}
         />
       </div>
     </div>
