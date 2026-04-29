@@ -649,7 +649,7 @@ const seed = async () => {
     await Industry.deleteMany();
     await Tool.deleteMany();
     await User.deleteMany({ role: 'CUSTOMER', email: 'demo@zynapse.com' });
-    await User.deleteMany({ role: 'ADMIN', email: 'admin@zynapse.com' });
+    await User.deleteMany({ role: 'ADMIN', email: 'admin@admin.com' });
 
     console.log('✅ Cleared old data');
 
@@ -663,18 +663,18 @@ const seed = async () => {
     console.log(`✅ Created ${tools.length} tools`);
 
     // Create admin user
-    const adminExists = await User.findOne({ email: 'admin@zynapse.com' });
+    const adminExists = await User.findOne({ email: 'admin@admin.com' });
     if (!adminExists) {
       await User.create({
         name: 'Admin User',
-        email: 'admin@zynapse.com',
+        email: 'admin@admin.com',
         password: 'Admin@123',
         role: 'ADMIN',
         status: 'active',
         planTier: 'BUSINESS',
         runsTotal: 99999,
       });
-      console.log('✅ Created admin user: admin@zynapse.com / Admin@123');
+      console.log('✅ Created admin user: admin@admin.com / Admin@123');
     }
 
     // Create demo customer
@@ -697,7 +697,7 @@ const seed = async () => {
 
     console.log('\n🎉 Seed complete!');
     console.log('──────────────────────────────────');
-    console.log('Admin:    admin@zynapse.com / Admin@123');
+    console.log('Admin:    admin@admin.com / Admin@123');
     console.log('Customer: demo@zynapse.com  / Demo@123');
     console.log('──────────────────────────────────');
     process.exit(0);
