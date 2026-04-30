@@ -11,6 +11,7 @@ export const getToolsByIndustry = async (req, res) => {
     if (!user.industryId) return res.json([]);
 
     const tools = await Tool.find({ industryId: user.industryId, status: 'active' })
+      .populate('industryId', 'name slug icon')
       .sort({ sortOrder: 1 })
       .select('-systemPrompt -userPromptTemplate');
     res.json(tools);

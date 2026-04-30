@@ -1,6 +1,47 @@
 @use "../../globalStyles" as *;
 
 .tools-list-page {
+  .industry-context {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid $primary_border;
+    border-radius: $radius_md;
+
+    &__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: $radius_sm;
+      background: $primary_bg;
+      @include flex-center;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    &__label {
+      font-size: $font_xs;
+      color: $muted_text;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    &__name {
+      font-size: $font_m;
+      color: $primary_text;
+      font-weight: 700;
+    }
+
+    &__count {
+      margin-left: auto;
+      color: $secondary_text;
+      font-size: $font_s;
+      font-weight: 600;
+    }
+  }
+
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

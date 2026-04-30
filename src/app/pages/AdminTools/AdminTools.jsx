@@ -4,13 +4,12 @@ import SubHeader from "../../components/SubHeader/SubHeader";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import InputField from "../../components/InputField/InputField";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import SelectInput from "../../components/SelectInput/SelectInput";
 import axiosInstance from "../../services/axiosInstance";
 import { ADMIN_GET_TOOLS, ADMIN_GET_INDUSTRIES, ADMIN_DELETE_TOOL, ADMIN_UPDATE_TOOL } from "../../utils/apiPath";
 import { successToast, errorToast } from "../../services/ToastHelper";
-import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 
 const AdminTools = () => {
@@ -18,19 +17,31 @@ const AdminTools = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [industries, setIndustries] = useState([]);
+  const [industryFilter, setIndustryFilter] = useState("all");
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchTools = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: res } = await axiosInstance.get(ADMIN_GET_TOOLS);
-      setData(res);
+      const [toolsRes, industriesRes] = await Promise.all([
+        axiosInstance.get(ADMIN_GET_TOOLS),
+        axiosInstance.get(ADMIN_GET_INDUSTRIES),
+      ]);
+      setData(toolsRes.data);
+      setIndustries(industriesRes.data);
     } catch { errorToast("Failed to load tools"); }
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { fetchTools(); }, [fetchTools]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      fetchTools();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [fetchTools]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -53,10 +64,25 @@ const AdminTools = () => {
     } catch { errorToast("Failed to update tool status"); }
   };
 
-  const filteredData = data.filter((t) =>
-    t.name?.toLowerCase().includes(search.toLowerCase()) ||
-    t.industryId?.name?.toLowerCase().includes(search.toLowerCase())
-  );
+  const industryOptions = [
+    { label: "All Industries", value: "all" },
+    ...industries.map((industry) => ({
+      label: `${industry.icon || ""} ${industry.name}`,
+      value: industry._id,
+    })),
+  ];
+
+  const filteredData = data.filter((tool) => {
+    const query = search.trim().toLowerCase();
+    const matchesSearch = !query ||
+      tool.name?.toLowerCase().includes(query) ||
+      tool.slug?.toLowerCase().includes(query) ||
+      tool.description?.toLowerCase().includes(query) ||
+      tool.industryId?.name?.toLowerCase().includes(query);
+    const matchesIndustry = industryFilter === "all" || tool.industryId?._id === industryFilter;
+
+    return matchesSearch && matchesIndustry;
+  });
 
   const columns = [
     {
@@ -136,8 +162,12 @@ const AdminTools = () => {
     <div className="admin-tools-page">
       <SubHeader
         title="AI Tools Management"
-        subTitle={`${data.length} tools configured across all industries.`}
+        subTitle={`${filteredData.length} of ${data.length} tools shown across ${industries.length} industries.`}
         showBack={false}
+        showRight
+        rightActionLabel="Add AI Tool"
+        rightActionIcon={<PlusOutlined />}
+        onRightClick={() => navigate("/admin/tools/new")}
       />
 
       <div style={{ display: "flex", gap: "16px", marginBottom: "20px", alignItems: "flex-end" }}>
@@ -148,6 +178,16 @@ const AdminTools = () => {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search tools or industries..."
             prefix={<SearchOutlined />}
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <SelectInput
+            title="Industry"
+            value={industryFilter}
+            onChange={(value) => setIndustryFilter(value || "all")}
+            options={industryOptions}
+            allowClear={false}
+            showSearch
           />
         </div>
       </div>

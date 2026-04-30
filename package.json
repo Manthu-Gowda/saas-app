@@ -6,6 +6,7 @@
   "scripts": {
     "frontend": "vite",
     "backend": "node server/index.js",
+    "seed": "node server/seed.js",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "build": "vite build",
     "lint": "eslint .",
