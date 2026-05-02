@@ -2268,6 +2268,1563 @@ Provide:
       outputFormat: 'markdown',
       sortOrder: 3,
     },
+
+    // ─── LEGAL (additional) ───────────────────────────────────────────────────
+    {
+      name: 'NDA Generator',
+      slug: 'nda-generator',
+      icon: '🤐',
+      description: 'Draft mutual or one-way non-disclosure agreements tailored to your situation.',
+      industryId: bySlug('legal'),
+      systemPrompt: 'You are a commercial contracts expert specialising in confidentiality and IP protection. You draft clear, enforceable NDAs that protect the disclosing party while being fair and practical. You tailor each NDA to the specific use case and jurisdiction.',
+      userPromptTemplate: `Draft a Non-Disclosure Agreement:
+
+NDA type: {nda_type}
+Disclosing party: {disclosing_party}
+Receiving party: {receiving_party}
+Purpose of disclosure: {purpose}
+Jurisdiction: {jurisdiction}
+Duration: {duration}
+Specific exclusions / carve-outs: {exclusions}
+
+Provide:
+1. **Complete NDA Document** (ready to sign)
+2. **Plain-English Summary** of key obligations
+3. **Key Risks for Each Party**
+4. **Optional Clauses** to consider adding`,
+      fields: [
+        { name: 'nda_type', label: 'NDA Type', type: 'select', required: true, options: ['One-way (unilateral)', 'Mutual (bilateral)', 'Employee NDA', 'Vendor / contractor NDA'] },
+        { name: 'disclosing_party', label: 'Disclosing Party', type: 'text', required: true, placeholder: 'Name and type of entity sharing information' },
+        { name: 'receiving_party', label: 'Receiving Party', type: 'text', required: true, placeholder: 'Name and type of entity receiving information' },
+        { name: 'purpose', label: 'Purpose of Disclosure', type: 'textarea', required: true, placeholder: 'e.g. Evaluating a potential business partnership, software development project' },
+        { name: 'jurisdiction', label: 'Governing Law / Jurisdiction', type: 'text', required: true, placeholder: 'e.g. India (Mumbai courts), England & Wales, Delaware, USA' },
+        { name: 'duration', label: 'Confidentiality Duration', type: 'select', required: false, options: ['1 year', '2 years', '3 years', '5 years', 'Indefinite', 'Custom'] },
+        { name: 'exclusions', label: 'Specific Exclusions or Notes', type: 'textarea', required: false, placeholder: 'Any specific carve-outs, exceptions, or unusual requirements...' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Legal Notice & Demand Letter',
+      slug: 'legal-notice-demand-letter',
+      icon: '⚠️',
+      description: 'Draft formal legal notices and demand letters that compel a response.',
+      industryId: bySlug('legal'),
+      systemPrompt: 'You are a litigation-experienced lawyer drafting formal legal notices and demand letters. Your notices are authoritative, factually clear, legally sound, and create the right urgency without being inflammatory. They set up a clear paper trail.',
+      userPromptTemplate: `Draft a legal notice / demand letter:
+
+Notice type: {notice_type}
+Sender details: {sender}
+Recipient details: {recipient}
+Facts & background: {facts}
+Legal basis / violation: {legal_basis}
+Demand / relief sought: {demand}
+Deadline for response: {deadline}
+Jurisdiction: {jurisdiction}
+
+Provide:
+1. **Formal Legal Notice** (ready to send / serve)
+2. **Key Legal Provisions Cited**
+3. **Recommended Mode of Delivery** (registered post, email, etc.)
+4. **Next Steps if Ignored**`,
+      fields: [
+        { name: 'notice_type', label: 'Notice Type', type: 'select', required: true, options: ['Payment / money recovery', 'Contract breach', 'Defamation / libel', 'Property dispute', 'Employment grievance', 'Consumer complaint', 'IP infringement', 'Eviction notice (tenant)'] },
+        { name: 'sender', label: 'Sender Details', type: 'textarea', required: true, placeholder: 'Name, address, contact — the party sending the notice' },
+        { name: 'recipient', label: 'Recipient Details', type: 'textarea', required: true, placeholder: 'Name, address — the party receiving the notice' },
+        { name: 'facts', label: 'Facts & Background', type: 'textarea', required: true, placeholder: 'Chronological facts and events leading to this notice...' },
+        { name: 'legal_basis', label: 'Legal Basis / Violation', type: 'textarea', required: true, placeholder: 'What law, contract, or right has been violated?' },
+        { name: 'demand', label: 'Demand / Relief Sought', type: 'textarea', required: true, placeholder: 'What exactly are you demanding? (payment, action, cessation...)' },
+        { name: 'deadline', label: 'Response Deadline', type: 'text', required: true, placeholder: 'e.g. 15 days from receipt' },
+        { name: 'jurisdiction', label: 'Jurisdiction', type: 'text', required: false, placeholder: 'e.g. India — Mumbai, UK — England & Wales' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── HR (additional) ──────────────────────────────────────────────────────
+    {
+      name: 'Offer Letter & Employment Contract',
+      slug: 'offer-letter-employment-contract',
+      icon: '🤝',
+      description: 'Draft professional offer letters and employment agreements for any role.',
+      industryId: bySlug('hr'),
+      systemPrompt: 'You are an HR professional and employment law specialist. You draft clear, professional offer letters and employment contracts that protect both employer and employee, set clear expectations, and are written in plain, professional language.',
+      userPromptTemplate: `Draft an {document_type} for:
+
+Company name: {company}
+Candidate name: {candidate}
+Role / position: {role}
+Department: {department}
+Start date: {start_date}
+Compensation: {compensation}
+Work arrangement: {work_arrangement}
+Probation period: {probation}
+Key terms: {key_terms}
+Jurisdiction: {jurisdiction}
+
+Provide a complete, professional document with all standard sections and any special terms specified.`,
+      fields: [
+        { name: 'document_type', label: 'Document Type', type: 'select', required: true, options: ['Offer letter', 'Employment agreement', 'Internship offer letter', 'Contract / freelance agreement', 'Promotion letter', 'Appointment letter'] },
+        { name: 'company', label: 'Company Name', type: 'text', required: true, placeholder: 'Your company name' },
+        { name: 'candidate', label: 'Candidate / Employee Name', type: 'text', required: true, placeholder: 'Full name' },
+        { name: 'role', label: 'Role / Job Title', type: 'text', required: true, placeholder: 'e.g. Senior Software Engineer' },
+        { name: 'department', label: 'Department', type: 'text', required: false, placeholder: 'e.g. Engineering, Marketing' },
+        { name: 'start_date', label: 'Start Date', type: 'text', required: true, placeholder: 'e.g. 1 June 2025' },
+        { name: 'compensation', label: 'Compensation Details', type: 'textarea', required: true, placeholder: 'Salary, bonus, equity, benefits...' },
+        { name: 'work_arrangement', label: 'Work Arrangement', type: 'select', required: false, options: ['Full-time on-site', 'Full-time remote', 'Hybrid', 'Part-time', 'Contract / fixed-term'] },
+        { name: 'probation', label: 'Probation Period', type: 'select', required: false, options: ['No probation', '1 month', '3 months', '6 months'] },
+        { name: 'key_terms', label: 'Key Terms & Special Clauses', type: 'textarea', required: false, placeholder: 'Notice period, non-compete, IP ownership, signing bonus clawback...' },
+        { name: 'jurisdiction', label: 'Jurisdiction / Country', type: 'text', required: false, placeholder: 'e.g. India, UK, USA — California' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+    {
+      name: 'HR Policy & Employee Handbook Section',
+      slug: 'hr-policy-handbook-section',
+      icon: '📘',
+      description: 'Draft HR policies and employee handbook sections that are clear and compliant.',
+      industryId: bySlug('hr'),
+      systemPrompt: 'You are an HR policy specialist with deep knowledge of employment law and best practices. You write clear, fair, and legally sound HR policies and handbook sections that employees can understand and follow. You balance compliance with a positive workplace culture.',
+      userPromptTemplate: `Write an HR policy / handbook section on:
+
+Policy topic: {policy_topic}
+Company type: {company_type}
+Company size: {company_size}
+Country / jurisdiction: {jurisdiction}
+Specific requirements: {requirements}
+Tone: {tone}
+
+Provide a complete policy section with:
+1. **Policy Title & Purpose**
+2. **Scope** (who it applies to)
+3. **Policy Statement**
+4. **Detailed Rules / Guidelines**
+5. **Employee Responsibilities**
+6. **Manager / HR Responsibilities**
+7. **Consequences of Non-compliance**
+8. **Review Date**`,
+      fields: [
+        { name: 'policy_topic', label: 'Policy Topic', type: 'select', required: true, options: ['Leave & time off policy', 'Work from home / remote work', 'Anti-harassment & POSH', 'Code of conduct', 'Performance improvement plan (PIP)', 'Expense reimbursement', 'Social media policy', 'Grievance redressal', 'Dress code', 'IT & device usage', 'Confidentiality & NDA', 'Equal opportunity & DEI'] },
+        { name: 'company_type', label: 'Company Type', type: 'text', required: false, placeholder: 'e.g. Tech startup, Manufacturing, Retail chain' },
+        { name: 'company_size', label: 'Company Size', type: 'select', required: false, options: ['1-50', '51-200', '201-1000', '1000+'] },
+        { name: 'jurisdiction', label: 'Country / Jurisdiction', type: 'text', required: true, placeholder: 'e.g. India, UK, USA' },
+        { name: 'requirements', label: 'Specific Requirements', type: 'textarea', required: false, placeholder: 'Any specific rules, exceptions, or existing practices to incorporate...' },
+        { name: 'tone', label: 'Tone', type: 'select', required: false, options: ['Formal & legal', 'Friendly & accessible', 'Startup / casual', 'Enterprise / corporate'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 6,
+    },
+
+    // ─── E-COMMERCE (additional) ──────────────────────────────────────────────
+    {
+      name: 'Abandoned Cart Email',
+      slug: 'abandoned-cart-email',
+      icon: '🛒',
+      description: 'Write high-converting abandoned cart recovery emails that bring shoppers back.',
+      industryId: bySlug('ecommerce'),
+      systemPrompt: 'You are an e-commerce email marketing specialist who writes abandoned cart recovery sequences that bring shoppers back without being pushy. You understand buyer psychology, create the right urgency, and personalise the message around the abandoned items.',
+      userPromptTemplate: `Write an abandoned cart recovery email sequence:
+
+Store / brand name: {brand}
+Product(s) abandoned: {products}
+Price / discount offer: {offer}
+Brand tone: {tone}
+Sequence length: {sequence_length}
+
+For each email provide: subject line, preview text, body (under 150 words), and CTA. Structure:
+- Email 1 (1-2 hours): Gentle reminder
+- Email 2 (24 hours): Address objections
+- Email 3 (48-72 hours): Final nudge with offer (if applicable)`,
+      fields: [
+        { name: 'brand', label: 'Store / Brand Name', type: 'text', required: true, placeholder: 'Your store name' },
+        { name: 'products', label: 'Abandoned Product(s)', type: 'textarea', required: true, placeholder: 'Product name(s) and key details left in cart...' },
+        { name: 'offer', label: 'Recovery Offer (optional)', type: 'text', required: false, placeholder: 'e.g. 10% off, free shipping, no offer' },
+        { name: 'tone', label: 'Brand Tone', type: 'select', required: false, options: ['Friendly & warm', 'Playful / fun', 'Premium / luxury', 'Urgent & direct', 'Minimalist'] },
+        { name: 'sequence_length', label: 'Emails in Sequence', type: 'select', required: false, options: ['1 email only', '2 emails', '3 emails (full sequence)'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Return & Refund Policy Generator',
+      slug: 'return-refund-policy',
+      icon: '↩️',
+      description: 'Generate clear, customer-friendly return and refund policies for your store.',
+      industryId: bySlug('ecommerce'),
+      systemPrompt: 'You are an e-commerce operations specialist and legal copywriter. You write return and refund policies that are legally sound, customer-friendly, and reduce support tickets by answering every common question upfront. You balance seller protection with buyer confidence.',
+      userPromptTemplate: `Generate a return & refund policy for:
+
+Store / business name: {store_name}
+Product type(s): {product_types}
+Return window: {return_window}
+Refund method: {refund_method}
+Conditions for returns: {conditions}
+Exceptions (non-returnable items): {exceptions}
+Country / platform: {country}
+
+Provide:
+1. **Full Return & Refund Policy** (ready to publish)
+2. **FAQ Section** (top 5 customer questions)
+3. **Short Summary** (50 words for checkout page)`,
+      fields: [
+        { name: 'store_name', label: 'Store / Business Name', type: 'text', required: true, placeholder: 'Your store name' },
+        { name: 'product_types', label: 'Product Types Sold', type: 'text', required: true, placeholder: 'e.g. Clothing, Electronics, Digital products, Food' },
+        { name: 'return_window', label: 'Return Window', type: 'select', required: true, options: ['7 days', '10 days', '15 days', '30 days', '60 days', 'No returns'] },
+        { name: 'refund_method', label: 'Refund Method', type: 'select', required: true, options: ['Original payment method', 'Store credit only', 'Exchange only', 'Original payment or store credit', 'Cash on collection'] },
+        { name: 'conditions', label: 'Return Conditions', type: 'textarea', required: false, placeholder: 'e.g. Unused, original packaging, tags intact, with receipt...' },
+        { name: 'exceptions', label: 'Non-returnable Items', type: 'text', required: false, placeholder: 'e.g. Innerwear, digital downloads, perishables, sale items' },
+        { name: 'country', label: 'Country / Platform', type: 'text', required: false, placeholder: 'e.g. India (Consumer Protection Act), UK, Amazon seller' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── REAL ESTATE (additional) ─────────────────────────────────────────────
+    {
+      name: 'Rental Agreement Summary',
+      slug: 'rental-agreement-summary',
+      icon: '🔑',
+      description: 'Summarise rental agreements into plain-language tenant and landlord guides.',
+      industryId: bySlug('real-estate'),
+      systemPrompt: 'You are a property management specialist and legal communicator. You distil complex rental agreements into clear, plain-language summaries that both tenants and landlords can act on. You highlight rights, obligations, and important dates.',
+      userPromptTemplate: `Summarise this rental agreement:
+
+Agreement text / key terms: {agreement_text}
+Audience: {audience}
+Property type: {property_type}
+Rent & deposit amount: {financials}
+Lease duration: {duration}
+
+Provide:
+1. **Key Terms at a Glance** (table)
+2. **Tenant Rights & Obligations**
+3. **Landlord Rights & Obligations**
+4. **Financial Summary** (rent, deposit, escalation)
+5. **Important Dates** (lease start, end, notice period)
+6. **Clauses to Pay Special Attention To**
+7. **Questions to Clarify Before Signing**`,
+      fields: [
+        { name: 'agreement_text', label: 'Agreement Text or Key Terms', type: 'textarea', required: true, placeholder: 'Paste the rental agreement or describe the main terms...' },
+        { name: 'audience', label: 'Audience', type: 'select', required: true, options: ['Tenant', 'Landlord', 'Property manager', 'Both tenant & landlord'] },
+        { name: 'property_type', label: 'Property Type', type: 'select', required: false, options: ['Residential apartment', 'Independent house', 'Commercial office', 'Retail shop', 'Warehouse / industrial', 'Co-working space'] },
+        { name: 'financials', label: 'Rent & Deposit Details', type: 'text', required: false, placeholder: 'e.g. ₹25,000/month, 3-month deposit' },
+        { name: 'duration', label: 'Lease Duration', type: 'text', required: false, placeholder: 'e.g. 11 months, 3 years with renewal option' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Property Investment Analysis',
+      slug: 'property-investment-analysis',
+      icon: '📈',
+      description: 'Generate structured property investment analyses with ROI and risk assessment.',
+      industryId: bySlug('real-estate'),
+      systemPrompt: 'You are a real estate investment analyst. You produce structured, objective property investment analyses that help investors evaluate deals. You calculate key metrics, assess risks, and provide clear buy/hold/pass recommendations.',
+      userPromptTemplate: `Analyse this property investment:
+
+Property details: {property_details}
+Purchase price: {price}
+Expected rental income: {rental_income}
+Operating costs: {costs}
+Financing details: {financing}
+Investment goal: {goal}
+Market context: {market_context}
+
+Provide:
+1. **Investment Summary** (1-paragraph verdict)
+2. **Key Metrics** (Gross Yield, Net Yield, Cap Rate, Cash-on-Cash ROI, Payback Period)
+3. **Cash Flow Analysis** (monthly/annual)
+4. **Risk Assessment** (location, vacancy, interest rate, liquidity)
+5. **Comparable Market Data** (based on info provided)
+6. **5-Year Projection** (appreciation + rental income)
+7. **Recommendation:** Buy / Hold / Pass with rationale`,
+      fields: [
+        { name: 'property_details', label: 'Property Details', type: 'textarea', required: true, placeholder: 'Type, size, location, age, condition, amenities...' },
+        { name: 'price', label: 'Purchase Price', type: 'text', required: true, placeholder: 'e.g. ₹75,00,000 / $300,000' },
+        { name: 'rental_income', label: 'Expected Monthly Rental Income', type: 'text', required: true, placeholder: 'e.g. ₹30,000/month' },
+        { name: 'costs', label: 'Monthly Operating Costs', type: 'textarea', required: false, placeholder: 'Maintenance, property tax, insurance, society charges, management fee...' },
+        { name: 'financing', label: 'Financing Details', type: 'text', required: false, placeholder: 'e.g. 20% down, home loan at 8.5% for 20 years' },
+        { name: 'goal', label: 'Investment Goal', type: 'select', required: false, options: ['Rental income (cash flow)', 'Capital appreciation', 'Both income and appreciation', 'Short-term flip', 'Commercial lease'] },
+        { name: 'market_context', label: 'Local Market Context', type: 'textarea', required: false, placeholder: 'Any market data, trends, or comparable properties you know of...' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── FINANCE (additional) ─────────────────────────────────────────────────
+    {
+      name: 'Business Loan Application Letter',
+      slug: 'business-loan-application',
+      icon: '🏦',
+      description: 'Write compelling business loan applications and credit request letters.',
+      industryId: bySlug('finance'),
+      systemPrompt: 'You are a business finance advisor who helps businesses write compelling loan applications and credit request letters. You know exactly what lenders and banks look for: clarity of purpose, repayment capacity, business viability, and management credibility.',
+      userPromptTemplate: `Write a business loan application for:
+
+Business name & type: {business_name}
+Loan amount: {loan_amount}
+Loan purpose: {loan_purpose}
+Business financials: {financials}
+Collateral available: {collateral}
+Repayment plan: {repayment}
+Lender / bank name: {lender}
+
+Provide:
+1. **Formal Loan Application Letter**
+2. **Business Overview Section**
+3. **Loan Purpose & Utilisation Plan**
+4. **Financial Snapshot** (revenue, profit, existing liabilities)
+5. **Repayment Capacity Argument**
+6. **Collateral Summary**
+7. **Documents Checklist** for submission`,
+      fields: [
+        { name: 'business_name', label: 'Business Name & Type', type: 'text', required: true, placeholder: 'e.g. ABC Traders Pvt Ltd — FMCG distributor' },
+        { name: 'loan_amount', label: 'Loan Amount Required', type: 'text', required: true, placeholder: 'e.g. ₹50,00,000 / $200,000' },
+        { name: 'loan_purpose', label: 'Loan Purpose', type: 'select', required: true, options: ['Working capital', 'Equipment / machinery purchase', 'Business expansion', 'Inventory financing', 'Office / property purchase', 'Technology upgrade', 'Export financing', 'Debt consolidation'] },
+        { name: 'financials', label: 'Business Financials (brief)', type: 'textarea', required: true, placeholder: 'Annual revenue, profit, years in business, existing loans...' },
+        { name: 'collateral', label: 'Collateral Available', type: 'text', required: false, placeholder: 'e.g. Property worth ₹1Cr, machinery, FDs' },
+        { name: 'repayment', label: 'Proposed Repayment Plan', type: 'text', required: false, placeholder: 'e.g. 5-year term, monthly EMI of ₹1.2L' },
+        { name: 'lender', label: 'Lender / Bank Name', type: 'text', required: false, placeholder: 'e.g. State Bank of India, HDFC Bank' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Budget & Financial Forecast',
+      slug: 'budget-financial-forecast',
+      icon: '📊',
+      description: 'Generate detailed business budgets and financial forecasts with commentary.',
+      industryId: bySlug('finance'),
+      systemPrompt: 'You are a management accountant and financial planning specialist. You build clear, realistic budgets and financial forecasts with well-reasoned assumptions and actionable commentary. Your forecasts help leadership make confident decisions.',
+      userPromptTemplate: `Create a {forecast_type} for:
+
+Business type: {business_type}
+Historical data / context: {historical_data}
+Revenue assumptions: {revenue_assumptions}
+Cost structure: {cost_structure}
+Forecast period: {period}
+Key growth drivers: {growth_drivers}
+Special items to include: {special_items}
+
+Provide:
+1. **Executive Summary** (key assumptions and headline numbers)
+2. **Revenue Forecast** (broken down by stream)
+3. **Cost / Expense Budget** (by category)
+4. **P&L Forecast** (monthly for 12 months or quarterly)
+5. **Cash Flow Projection**
+6. **Key Financial Metrics** (margins, break-even, runway)
+7. **Scenario Analysis** (Base / Optimistic / Conservative)
+8. **Key Risks & Assumptions**`,
+      fields: [
+        { name: 'forecast_type', label: 'Document Type', type: 'select', required: true, options: ['Annual operating budget', '3-year financial forecast', 'Startup financial model', 'Project budget', 'Department budget', 'Cash flow forecast'] },
+        { name: 'business_type', label: 'Business Type', type: 'text', required: true, placeholder: 'e.g. SaaS startup, Retail chain, Manufacturing SME' },
+        { name: 'historical_data', label: 'Historical Data / Context', type: 'textarea', required: false, placeholder: 'Revenue, costs, margins from last 1-2 years...' },
+        { name: 'revenue_assumptions', label: 'Revenue Assumptions', type: 'textarea', required: true, placeholder: 'Expected sales, pricing, growth rate, new products/markets...' },
+        { name: 'cost_structure', label: 'Cost Structure', type: 'textarea', required: true, placeholder: 'Key costs — salaries, rent, COGS, marketing, etc...' },
+        { name: 'period', label: 'Forecast Period', type: 'select', required: true, options: ['Monthly (12 months)', 'Quarterly (12 months)', 'Annual (3 years)', 'Annual (5 years)'] },
+        { name: 'growth_drivers', label: 'Key Growth Drivers', type: 'text', required: false, placeholder: 'e.g. New product launch, geographic expansion, headcount addition' },
+        { name: 'special_items', label: 'Special Items to Include', type: 'text', required: false, placeholder: 'e.g. Capex, fundraise, loan repayment, one-time costs' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── MARKETING (additional) ───────────────────────────────────────────────
+    {
+      name: 'Press Release Writer',
+      slug: 'press-release-writer',
+      icon: '📰',
+      description: 'Write newsworthy press releases that get picked up by media outlets.',
+      industryId: bySlug('marketing'),
+      systemPrompt: 'You are a PR specialist and journalist who writes press releases that editors actually publish. You lead with the news angle, follow the inverted pyramid, include the right quotes, and provide everything a journalist needs to write the story.',
+      userPromptTemplate: `Write a press release for:
+
+Announcement type: {announcement_type}
+Company / organisation: {company}
+Headline news: {news}
+Key facts & details: {facts}
+Executive quote: {quote}
+Background / company boilerplate: {background}
+Contact details: {contact}
+Release date: {release_date}
+
+Write a complete, journalist-ready press release following the standard format: FOR IMMEDIATE RELEASE / headline / subheadline / dateline / body (inverted pyramid) / boilerplate / ### / contact details.`,
+      fields: [
+        { name: 'announcement_type', label: 'Announcement Type', type: 'select', required: true, options: ['Product launch', 'Funding / investment round', 'Partnership / collaboration', 'Award / recognition', 'New executive / leadership hire', 'Expansion / new market', 'Milestone achievement', 'Event announcement', 'Crisis / clarification statement'] },
+        { name: 'company', label: 'Company / Organisation Name', type: 'text', required: true, placeholder: 'Your company name' },
+        { name: 'news', label: 'The Core News / Announcement', type: 'textarea', required: true, placeholder: 'What are you announcing? Key facts in plain language...' },
+        { name: 'facts', label: 'Supporting Facts & Details', type: 'textarea', required: true, placeholder: 'Numbers, dates, features, quotes, statistics...' },
+        { name: 'quote', label: 'Executive Quote', type: 'textarea', required: false, placeholder: 'Quote from CEO or relevant spokesperson (will be formatted)...' },
+        { name: 'background', label: 'Company Boilerplate (About)', type: 'textarea', required: false, placeholder: '2-3 sentence company description for the "About" section...' },
+        { name: 'contact', label: 'PR Contact Details', type: 'text', required: false, placeholder: 'Name, email, phone for media enquiries' },
+        { name: 'release_date', label: 'Release Date', type: 'text', required: false, placeholder: 'e.g. For Immediate Release / Embargoed until 1 June 2025' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Brand Positioning Statement',
+      slug: 'brand-positioning-statement',
+      icon: '🎯',
+      description: 'Craft a compelling brand positioning statement and messaging framework.',
+      industryId: bySlug('marketing'),
+      systemPrompt: 'You are a brand strategist and marketing consultant. You develop sharp brand positioning statements and messaging frameworks that give companies a clear, differentiated market position. You help brands articulate their unique value in a way that resonates deeply with their target audience.',
+      userPromptTemplate: `Develop a brand positioning strategy for:
+
+Brand / company: {brand}
+Industry: {industry}
+Target audience: {audience}
+Key competitors: {competitors}
+Core product / service: {product}
+Unique differentiators: {differentiators}
+Brand values: {values}
+Current perception (if known): {current_perception}
+
+Provide:
+1. **Positioning Statement** (classic Geoffrey Moore format)
+2. **Tagline Options** (3 variations)
+3. **Brand Personality** (5 traits)
+4. **Core Message Pillars** (3-4 key messages)
+5. **Elevator Pitch** (30-second version)
+6. **Target Audience Persona Summary**
+7. **Competitive Differentiation Map**
+8. **Tone of Voice Guide**`,
+      fields: [
+        { name: 'brand', label: 'Brand / Company Name', type: 'text', required: true, placeholder: 'Your brand name' },
+        { name: 'industry', label: 'Industry / Category', type: 'text', required: true, placeholder: 'e.g. Fintech, Organic food, B2B SaaS, Fashion' },
+        { name: 'audience', label: 'Primary Target Audience', type: 'textarea', required: true, placeholder: 'Who is your ideal customer? Demographics, psychographics, pain points...' },
+        { name: 'competitors', label: 'Key Competitors', type: 'text', required: false, placeholder: 'Main competitors or alternatives your audience considers' },
+        { name: 'product', label: 'Core Product / Service', type: 'textarea', required: true, placeholder: 'What do you sell and what problem does it solve?' },
+        { name: 'differentiators', label: 'Unique Differentiators', type: 'textarea', required: true, placeholder: 'What makes you genuinely different from competitors?' },
+        { name: 'values', label: 'Brand Values', type: 'text', required: false, placeholder: 'e.g. Transparency, Innovation, Sustainability, Simplicity' },
+        { name: 'current_perception', label: 'Current Brand Perception (optional)', type: 'textarea', required: false, placeholder: 'How are you perceived now? Any gaps between reality and desired perception?' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── ACCOUNTING & TAX (additional) ────────────────────────────────────────
+    {
+      name: 'Payroll Summary Generator',
+      slug: 'payroll-summary-generator',
+      icon: '💳',
+      description: 'Generate clear payroll summaries, salary slips, and payroll reconciliation reports.',
+      industryId: bySlug('accounting-tax'),
+      systemPrompt: 'You are a payroll accountant and HR operations specialist. You produce accurate, clear payroll summaries and salary slips that employees understand and that satisfy statutory requirements. You know payroll components, deductions, and compliance norms.',
+      userPromptTemplate: `Generate a {document_type}:
+
+Employee details: {employee}
+Pay period: {pay_period}
+Gross salary: {gross_salary}
+Earnings breakdown: {earnings}
+Deductions: {deductions}
+Company name: {company}
+Jurisdiction: {jurisdiction}
+
+Provide the complete document with all earnings, deductions, employer contributions, net pay, and a clear breakdown table. Include statutory deduction references where applicable.`,
+      fields: [
+        { name: 'document_type', label: 'Document Type', type: 'select', required: true, options: ['Salary slip / payslip', 'Monthly payroll summary', 'Annual CTC breakdown', 'Full & final settlement', 'Payroll reconciliation report'] },
+        { name: 'employee', label: 'Employee Details', type: 'text', required: true, placeholder: 'Name, ID, designation, department' },
+        { name: 'pay_period', label: 'Pay Period', type: 'text', required: true, placeholder: 'e.g. April 2025, FY 2024-25' },
+        { name: 'gross_salary', label: 'Gross Monthly Salary', type: 'text', required: true, placeholder: 'e.g. ₹75,000' },
+        { name: 'earnings', label: 'Earnings Breakdown', type: 'textarea', required: false, placeholder: 'Basic, HRA, DA, special allowance, overtime, bonus...' },
+        { name: 'deductions', label: 'Deductions', type: 'textarea', required: false, placeholder: 'PF, ESI, PT, TDS, advance recovery, leave deductions...' },
+        { name: 'company', label: 'Company Name', type: 'text', required: true, placeholder: 'Your company name' },
+        { name: 'jurisdiction', label: 'Country / State', type: 'text', required: false, placeholder: 'e.g. India — Maharashtra, UK, Singapore' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Financial Statement Writer',
+      slug: 'financial-statement-writer',
+      icon: '📋',
+      description: 'Generate notes, commentary, and narrative for financial statements.',
+      industryId: bySlug('accounting-tax'),
+      systemPrompt: 'You are a chartered accountant specialising in financial reporting. You write clear, accurate, and GAAP/IFRS-aligned notes and commentary for financial statements that explain the numbers, disclose material information, and meet reporting standards.',
+      userPromptTemplate: `Write financial statement {document_section} for:
+
+Company name & type: {company}
+Reporting period: {period}
+Financial data: {financial_data}
+Accounting standards: {standards}
+Specific notes required: {notes_required}
+Audience: {audience}
+
+Provide well-structured, professional content that accurately reflects the financial position, complies with disclosure requirements, and is written in clear accounting language appropriate for the audience.`,
+      fields: [
+        { name: 'document_section', label: 'Section / Document', type: 'select', required: true, options: ['Director\'s report', 'Management discussion & analysis (MD&A)', 'Notes to accounts', 'Auditor\'s report narrative', 'Cash flow statement notes', 'Significant accounting policies', 'Going concern assessment'] },
+        { name: 'company', label: 'Company Name & Type', type: 'text', required: true, placeholder: 'e.g. ABC Industries Pvt Ltd — manufacturing SME' },
+        { name: 'period', label: 'Reporting Period', type: 'text', required: true, placeholder: 'e.g. FY 2024-25 (31 March 2025)' },
+        { name: 'financial_data', label: 'Key Financial Data', type: 'textarea', required: true, placeholder: 'Revenue, profit, key balance sheet items, significant transactions...' },
+        { name: 'standards', label: 'Accounting Standards', type: 'select', required: false, options: ['Indian GAAP (AS)', 'Ind AS (IFRS-aligned)', 'IFRS', 'US GAAP', 'Not specified'] },
+        { name: 'notes_required', label: 'Specific Notes Required', type: 'textarea', required: false, placeholder: 'Any specific disclosures, changes in policy, related-party transactions...' },
+        { name: 'audience', label: 'Primary Audience', type: 'select', required: false, options: ['Statutory filing', 'Shareholders / investors', 'Banks & lenders', 'Board of directors'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── AUTOMOTIVE (additional) ──────────────────────────────────────────────
+    {
+      name: 'Warranty Claim Letter',
+      slug: 'warranty-claim-letter',
+      icon: '🔧',
+      description: 'Draft warranty claim letters and escalation communications for vehicle defects.',
+      industryId: bySlug('automotive'),
+      systemPrompt: 'You are an automotive consumer rights specialist. You draft precise, well-documented warranty claim letters that clearly state the defect, reference the warranty terms, and compel manufacturers and dealers to take action. You know what to include to make a claim undeniable.',
+      userPromptTemplate: `Draft a warranty claim letter for:
+
+Claim to: {recipient}
+Vehicle details: {vehicle}
+Purchase date & dealer: {purchase_info}
+Defect description: {defect}
+Repair attempts made: {repair_attempts}
+Warranty coverage: {warranty}
+Resolution requested: {resolution}
+Owner details: {owner}
+
+Write a firm, professional letter with: full complaint, timeline of events, warranty reference, specific resolution demand, and a clear deadline for response.`,
+      fields: [
+        { name: 'recipient', label: 'Letter Addressed To', type: 'select', required: true, options: ['Authorised dealer / service centre', 'Vehicle manufacturer (OEM)', 'Consumer forum / NCDRC', 'Insurance company'] },
+        { name: 'vehicle', label: 'Vehicle Details', type: 'text', required: true, placeholder: 'Make, model, year, registration number, VIN/chassis number' },
+        { name: 'purchase_info', label: 'Purchase Date & Dealer', type: 'text', required: true, placeholder: 'Date of purchase and dealer name/location' },
+        { name: 'defect', label: 'Defect Description', type: 'textarea', required: true, placeholder: 'Describe the problem in detail — what happens, when, how often...' },
+        { name: 'repair_attempts', label: 'Repair Attempts So Far', type: 'textarea', required: false, placeholder: 'Dates visited, work done, job card numbers, outcome...' },
+        { name: 'warranty', label: 'Warranty Coverage Reference', type: 'text', required: false, placeholder: 'e.g. 3-year / 1,00,000 km warranty, extended warranty plan' },
+        { name: 'resolution', label: 'Resolution Requested', type: 'select', required: true, options: ['Free repair under warranty', 'Replacement of defective part', 'Full vehicle replacement', 'Refund', 'Compensation for downtime/expenses'] },
+        { name: 'owner', label: 'Vehicle Owner Details', type: 'textarea', required: true, placeholder: 'Name, address, contact number' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Vehicle Service Package Proposal',
+      slug: 'vehicle-service-package-proposal',
+      icon: '🛠️',
+      description: 'Create compelling annual maintenance contract and service package proposals.',
+      industryId: bySlug('automotive'),
+      systemPrompt: 'You are an automotive service business development specialist. You create compelling AMC (Annual Maintenance Contract) and service package proposals that clearly communicate value, build trust, and convert vehicle owners into long-term service customers.',
+      userPromptTemplate: `Create a vehicle service package proposal for:
+
+Package type: {package_type}
+Workshop / dealership: {workshop}
+Vehicle make/model: {vehicle}
+Package duration: {duration}
+Services included: {services}
+Package price: {price}
+Current market comparison: {comparison}
+Customer name: {customer}
+
+Provide:
+1. **Proposal Cover Letter** (personalised)
+2. **Package Overview** (what's included, clearly laid out)
+3. **Services Included Table** with frequency and value
+4. **Cost Comparison** (package vs. pay-as-you-go)
+5. **Key Benefits Highlighted**
+6. **Terms & Conditions** (brief)
+7. **CTA** (how to enroll)`,
+      fields: [
+        { name: 'package_type', label: 'Package Type', type: 'select', required: true, options: ['Annual Maintenance Contract (AMC)', 'Comprehensive service plan', 'Basic service plan', 'Fleet service contract', 'Pre-owned vehicle service package', 'EV maintenance package'] },
+        { name: 'workshop', label: 'Workshop / Dealership Name', type: 'text', required: true, placeholder: 'Your business name' },
+        { name: 'vehicle', label: 'Vehicle Make & Model', type: 'text', required: true, placeholder: 'e.g. Maruti Swift, Toyota Innova, Fleet of 10 Boleros' },
+        { name: 'duration', label: 'Package Duration', type: 'select', required: true, options: ['6 months', '1 year', '2 years', '3 years'] },
+        { name: 'services', label: 'Services Included', type: 'textarea', required: true, placeholder: 'List all services covered (oil change, filter, tyres, etc.)...' },
+        { name: 'price', label: 'Package Price', type: 'text', required: true, placeholder: 'e.g. ₹12,500/year' },
+        { name: 'comparison', label: 'Standard Rate Comparison', type: 'text', required: false, placeholder: 'e.g. Same services would cost ₹19,000 individually' },
+        { name: 'customer', label: 'Customer Name', type: 'text', required: false, placeholder: 'Prospective customer\'s name' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── CYBERSECURITY (additional) ───────────────────────────────────────────
+    {
+      name: 'Penetration Test Report',
+      slug: 'pentest-report',
+      icon: '🔍',
+      description: 'Generate structured penetration test reports with findings and remediation guidance.',
+      industryId: bySlug('cybersecurity'),
+      systemPrompt: 'You are a senior penetration tester and cybersecurity consultant. You write professional, structured pentest reports that clearly communicate findings to both executive and technical audiences, with accurate risk ratings and actionable remediation guidance.',
+      userPromptTemplate: `Generate a penetration test report for:
+
+Target scope: {scope}
+Test type: {test_type}
+Testing period: {test_period}
+Methodology: {methodology}
+Findings summary: {findings}
+Client organisation: {client}
+Tester / team: {tester}
+
+Provide a complete report:
+1. **Executive Summary** (non-technical, key risks, overall rating)
+2. **Scope & Methodology**
+3. **Findings Table** (ID, title, severity, CVSS score)
+4. **Detailed Findings** per vulnerability (description, evidence, impact, remediation)
+5. **Risk Heatmap Summary**
+6. **Remediation Roadmap** (prioritised)
+7. **Positive Security Controls Observed**
+8. **Conclusion & Retest Recommendation**`,
+      fields: [
+        { name: 'scope', label: 'Test Scope / Target', type: 'textarea', required: true, placeholder: 'e.g. Web app at app.example.com, internal network 192.168.1.0/24, mobile app' },
+        { name: 'test_type', label: 'Test Type', type: 'select', required: true, options: ['External network pentest', 'Internal network pentest', 'Web application pentest', 'Mobile app pentest', 'API security test', 'Social engineering / phishing simulation', 'Red team exercise', 'Cloud infrastructure review'] },
+        { name: 'test_period', label: 'Testing Period', type: 'text', required: true, placeholder: 'e.g. 15-19 April 2025' },
+        { name: 'methodology', label: 'Methodology Used', type: 'text', required: false, placeholder: 'e.g. OWASP Top 10, PTES, NIST, Black/Grey/White box' },
+        { name: 'findings', label: 'Findings Summary', type: 'textarea', required: true, placeholder: 'List each vulnerability found with brief description and severity...' },
+        { name: 'client', label: 'Client Organisation', type: 'text', required: true, placeholder: 'Client company name' },
+        { name: 'tester', label: 'Tester / Firm Name', type: 'text', required: false, placeholder: 'Your name or firm' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Data Privacy & GDPR Compliance Guide',
+      slug: 'gdpr-privacy-compliance-guide',
+      icon: '🔒',
+      description: 'Generate data privacy compliance guides, DPIA templates, and privacy notices.',
+      industryId: bySlug('cybersecurity'),
+      systemPrompt: 'You are a data protection officer (DPO) and privacy law specialist. You produce practical, jurisdiction-specific data privacy compliance documents that help organisations comply with GDPR, DPDP Act, CCPA, and other regulations. You translate legal obligations into actionable steps.',
+      userPromptTemplate: `Create a data privacy compliance document:
+
+Document type: {doc_type}
+Organisation type: {org_type}
+Data processed: {data_types}
+Processing purposes: {purposes}
+Applicable regulation(s): {regulations}
+Jurisdiction: {jurisdiction}
+Audience: {audience}
+
+Provide a complete, regulation-aligned document with all required sections, clear obligations, practical guidance, and a compliance checklist.`,
+      fields: [
+        { name: 'doc_type', label: 'Document Type', type: 'select', required: true, options: ['Privacy Policy (website)', 'Data Protection Impact Assessment (DPIA)', 'Privacy Notice for employees', 'Data Processing Agreement (DPA)', 'Cookie Policy', 'Data Breach Response Plan', 'Records of Processing Activities (RoPA)', 'Consent form / opt-in language'] },
+        { name: 'org_type', label: 'Organisation Type', type: 'text', required: true, placeholder: 'e.g. E-commerce platform, Healthcare app, B2B SaaS, NGO' },
+        { name: 'data_types', label: 'Types of Data Processed', type: 'textarea', required: true, placeholder: 'e.g. Names, emails, health records, payment data, location data...' },
+        { name: 'purposes', label: 'Processing Purposes', type: 'textarea', required: true, placeholder: 'Why is the data collected? What is it used for?' },
+        { name: 'regulations', label: 'Applicable Regulation(s)', type: 'select', required: true, options: ['GDPR (EU/UK)', 'India DPDP Act 2023', 'CCPA (California)', 'HIPAA (US Healthcare)', 'Multiple regulations', 'Not sure — generate general best practice'] },
+        { name: 'jurisdiction', label: 'Primary Jurisdiction', type: 'text', required: false, placeholder: 'e.g. India, EU, USA, Global' },
+        { name: 'audience', label: 'Document Audience', type: 'select', required: false, options: ['Website visitors / customers', 'Employees', 'Partners / vendors', 'Regulators', 'Internal compliance team'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── HEALTHCARE (additional) ──────────────────────────────────────────────
+    {
+      name: 'Doctor Referral Letter',
+      slug: 'doctor-referral-letter',
+      icon: '👨‍⚕️',
+      description: 'Generate professional doctor-to-doctor referral and consultation request letters.',
+      industryId: bySlug('healthcare'),
+      systemPrompt: 'You are a clinical communication specialist. You produce professional, complete referral letters that give the receiving specialist exactly the information they need to continue patient care efficiently. Your letters are concise, clinically precise, and professionally formatted.',
+      userPromptTemplate: `Write a medical referral letter:
+
+Referring doctor: {referring_doctor}
+Specialist / recipient: {specialist}
+Patient (anonymised): {patient}
+Referral reason: {reason}
+Relevant history: {history}
+Current medications: {medications}
+Investigations done: {investigations}
+Urgency: {urgency}
+
+Provide:
+1. **Formal Referral Letter** (ready to send)
+2. **Clinical Summary** section
+3. **Specific Questions / Information Requested from Specialist**
+4. **Follow-up Instructions**`,
+      fields: [
+        { name: 'referring_doctor', label: 'Referring Doctor & Facility', type: 'text', required: true, placeholder: 'Dr. Name, Speciality, Hospital/Clinic name' },
+        { name: 'specialist', label: 'Referred To (Specialist / Hospital)', type: 'text', required: true, placeholder: 'Dr. Name / Department / Hospital' },
+        { name: 'patient', label: 'Patient Details (anonymised)', type: 'text', required: true, placeholder: 'e.g. 52-year-old male, diabetic, hypertensive' },
+        { name: 'reason', label: 'Reason for Referral', type: 'textarea', required: true, placeholder: 'Clinical reason / presenting complaint requiring specialist opinion...' },
+        { name: 'history', label: 'Relevant Medical History', type: 'textarea', required: true, placeholder: 'Past medical history, surgical history, family history relevant to referral...' },
+        { name: 'medications', label: 'Current Medications', type: 'textarea', required: false, placeholder: 'List current drugs, doses, and duration...' },
+        { name: 'investigations', label: 'Investigations Already Done', type: 'textarea', required: false, placeholder: 'Lab reports, imaging, biopsies completed and findings...' },
+        { name: 'urgency', label: 'Referral Urgency', type: 'select', required: true, options: ['Routine (within 4-6 weeks)', 'Soon (within 1-2 weeks)', 'Urgent (within 48-72 hours)', 'Emergency (same day)'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Hospital / Clinic Communication',
+      slug: 'hospital-clinic-communication',
+      icon: '🏥',
+      description: 'Write professional hospital communications — notices, patient letters, and admin correspondence.',
+      industryId: bySlug('healthcare'),
+      systemPrompt: 'You are a healthcare communications specialist. You write clear, empathetic, and compliant hospital and clinic communications that reassure patients, maintain professional standards, and meet healthcare regulatory requirements.',
+      userPromptTemplate: `Write a healthcare communication:
+
+Communication type: {comm_type}
+Hospital / clinic: {facility}
+Patient / recipient: {recipient}
+Key message: {message}
+Appointment / procedure details: {details}
+Contact information: {contact}
+Tone: {tone}
+
+Provide:
+1. **Main Communication** (ready to send)
+2. **Short SMS / WhatsApp Version**
+3. **Subject line** (if email format)`,
+      fields: [
+        { name: 'comm_type', label: 'Communication Type', type: 'select', required: true, options: ['Appointment reminder', 'Test results notification', 'Pre-procedure instructions', 'Post-treatment care instructions', 'Bill / payment notice', 'Feedback request', 'Health camp / awareness notice', 'Admission confirmation', 'Discharge follow-up'] },
+        { name: 'facility', label: 'Hospital / Clinic Name', type: 'text', required: true, placeholder: 'Your facility name' },
+        { name: 'recipient', label: 'Patient / Recipient Name', type: 'text', required: true, placeholder: 'e.g. Mr. Rajesh Kumar / Patient of Dr. Sharma' },
+        { name: 'message', label: 'Key Message / Details', type: 'textarea', required: true, placeholder: 'Main information to communicate...' },
+        { name: 'details', label: 'Appointment / Procedure Details', type: 'text', required: false, placeholder: 'Date, time, department, special instructions...' },
+        { name: 'contact', label: 'Contact / Helpline', type: 'text', required: false, placeholder: 'Phone number, email, or department to contact' },
+        { name: 'tone', label: 'Tone', type: 'select', required: false, options: ['Warm & reassuring', 'Professional & formal', 'Urgent & clear', 'Informational'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── RETAIL (additional) ──────────────────────────────────────────────────
+    {
+      name: 'Customer Complaint Response',
+      slug: 'customer-complaint-response',
+      icon: '💬',
+      description: 'Write empathetic, solution-focused responses to customer complaints.',
+      industryId: bySlug('retail'),
+      systemPrompt: 'You are a retail customer experience specialist. You handle complaints in a way that turns unhappy customers into loyal ones. Your responses are empathetic, take responsibility where appropriate, offer clear solutions, and leave the customer feeling heard and valued.',
+      userPromptTemplate: `Write a customer complaint response:
+
+Complaint channel: {channel}
+Customer name: {customer_name}
+Complaint details: {complaint}
+What went wrong: {issue}
+Resolution offered: {resolution}
+Brand tone: {tone}
+
+Write a response that: opens with empathy, acknowledges the specific issue, apologises sincerely, explains what happened (briefly, without excuses), provides a clear resolution, and ends on a positive note. Keep it under 200 words.`,
+      fields: [
+        { name: 'channel', label: 'Response Channel', type: 'select', required: true, options: ['Email reply', 'In-store verbal script', 'WhatsApp / SMS', 'Social media comment', 'Online review (Google / Amazon)'] },
+        { name: 'customer_name', label: 'Customer Name', type: 'text', required: true, placeholder: 'Customer first name' },
+        { name: 'complaint', label: 'Customer Complaint Summary', type: 'textarea', required: true, placeholder: 'What is the customer complaining about?' },
+        { name: 'issue', label: 'Root Cause / What Actually Happened', type: 'textarea', required: false, placeholder: 'Internal context — what went wrong and why...' },
+        { name: 'resolution', label: 'Resolution Being Offered', type: 'text', required: true, placeholder: 'e.g. Full refund, replacement, ₹500 voucher, free exchange' },
+        { name: 'tone', label: 'Brand Tone', type: 'select', required: false, options: ['Warm & apologetic', 'Professional & formal', 'Friendly & casual', 'Premium / luxury brand'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 3,
+    },
+    {
+      name: 'Store Newsletter & Announcement',
+      slug: 'store-newsletter-announcement',
+      icon: '📣',
+      description: 'Write engaging store newsletters, new arrival announcements, and event communications.',
+      industryId: bySlug('retail'),
+      systemPrompt: 'You are a retail content marketer. You write store newsletters and announcements that customers actually open, read, and act on. Your content is warm, exciting, and always gives the reader a reason to visit the store or shop online.',
+      userPromptTemplate: `Write a store {content_type}:
+
+Store / brand name: {store_name}
+Main announcement: {announcement}
+Products / offers to feature: {features}
+Target audience: {audience}
+Tone: {tone}
+CTA: {cta}
+Distribution channel: {channel}
+
+Create engaging content that grabs attention, communicates value clearly, and drives action. Include subject line if email format.`,
+      fields: [
+        { name: 'content_type', label: 'Content Type', type: 'select', required: true, options: ['Monthly newsletter', 'New arrivals announcement', 'Sale announcement', 'Store opening / re-opening', 'Brand story / about us', 'Seasonal / festival message', 'Product spotlight', 'Event / workshop invitation'] },
+        { name: 'store_name', label: 'Store / Brand Name', type: 'text', required: true, placeholder: 'Your store name' },
+        { name: 'announcement', label: 'Main Announcement / Theme', type: 'textarea', required: true, placeholder: 'What is the primary message you want to share?' },
+        { name: 'features', label: 'Products / Offers to Feature', type: 'textarea', required: false, placeholder: 'Specific products, collections, or deals to highlight...' },
+        { name: 'audience', label: 'Target Audience', type: 'text', required: false, placeholder: 'e.g. Existing customers, loyalty members, families' },
+        { name: 'tone', label: 'Tone', type: 'select', required: false, options: ['Warm & friendly', 'Exciting & energetic', 'Premium & aspirational', 'Festive & celebratory', 'Informational'] },
+        { name: 'cta', label: 'Call to Action', type: 'text', required: false, placeholder: 'e.g. Visit us this weekend, Shop now, Book your spot' },
+        { name: 'channel', label: 'Distribution Channel', type: 'select', required: false, options: ['Email', 'WhatsApp broadcast', 'SMS', 'Social media caption', 'In-store display / notice'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Visual Merchandising Brief',
+      slug: 'visual-merchandising-brief',
+      icon: '🏬',
+      description: 'Create visual merchandising plans and display briefs for retail store layouts.',
+      industryId: bySlug('retail'),
+      systemPrompt: 'You are a visual merchandising expert with retail design experience. You create detailed, actionable display briefs that help store teams create compelling product displays, optimise store flow, and maximise sales per square foot.',
+      userPromptTemplate: `Create a visual merchandising plan for:
+
+Store type: {store_type}
+Display area: {display_area}
+Season / campaign: {season}
+Key products to feature: {products}
+Target customer: {target}
+Store size & layout notes: {layout}
+Budget level: {budget}
+
+Provide:
+1. **Display Concept & Theme**
+2. **Zone-by-Zone Layout Plan** (entrance, middle floor, checkout)
+3. **Focal Point / Hero Display** instructions
+4. **Product Placement Guidelines** (eye level, cross-selling)
+5. **Colour & Props Recommendations**
+6. **Signage & POS Material Suggestions**
+7. **Lighting Notes**
+8. **Team Setup Checklist**`,
+      fields: [
+        { name: 'store_type', label: 'Store Type', type: 'select', required: true, options: ['Fashion / apparel', 'Electronics', 'Grocery / supermarket', 'Pharmacy / health', 'Home décor / furniture', 'Jewellery', 'Sports & fitness', 'Bookstore', 'Multi-brand outlet'] },
+        { name: 'display_area', label: 'Display Area / Section', type: 'text', required: true, placeholder: 'e.g. Entrance window, summer collection zone, checkout counter' },
+        { name: 'season', label: 'Season / Campaign', type: 'text', required: true, placeholder: 'e.g. Summer 2025, Diwali, Back to School, Valentine\'s Day' },
+        { name: 'products', label: 'Key Products to Feature', type: 'textarea', required: true, placeholder: 'Hero products, new arrivals, or sale items to highlight...' },
+        { name: 'target', label: 'Target Customer Profile', type: 'text', required: false, placeholder: 'e.g. Young women 18-30, families with kids, premium shoppers' },
+        { name: 'layout', label: 'Store Layout Notes', type: 'textarea', required: false, placeholder: 'Approximate dimensions, fixtures available, any constraints...' },
+        { name: 'budget', label: 'Display Budget Level', type: 'select', required: false, options: ['Low (use existing fixtures, no new props)', 'Medium (some new props/signage allowed)', 'High (full custom display possible)'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── LOGISTICS (additional) ───────────────────────────────────────────────
+    {
+      name: 'Customs & Import Documentation Guide',
+      slug: 'customs-import-docs-guide',
+      icon: '🛃',
+      description: 'Generate customs documentation guides and import/export compliance checklists.',
+      industryId: bySlug('logistics'),
+      systemPrompt: 'You are an international trade and customs compliance specialist. You produce accurate, practical customs documentation guides and compliance checklists that help importers, exporters, and freight companies navigate customs procedures correctly and avoid costly delays.',
+      userPromptTemplate: `Generate a customs documentation guide for:
+
+Trade type: {trade_type}
+Product / commodity: {product}
+Origin country: {origin}
+Destination country: {destination}
+HS code (if known): {hs_code}
+Shipment value: {value}
+Special requirements: {requirements}
+
+Provide:
+1. **Required Documents Checklist** (with descriptions)
+2. **Customs Process Overview** (step-by-step)
+3. **Applicable Duties & Taxes** (estimated)
+4. **Key Compliance Points** to verify
+5. **Common Mistakes That Cause Delays**
+6. **Restricted / Prohibited Items** to be aware of
+7. **Useful Contacts / Portals**`,
+      fields: [
+        { name: 'trade_type', label: 'Trade Type', type: 'select', required: true, options: ['Import into India', 'Export from India', 'Import into UK / EU', 'Export to USA', 'Import into UAE / GCC', 'Cross-border e-commerce shipment', 'Re-export / transit shipment'] },
+        { name: 'product', label: 'Product / Commodity', type: 'text', required: true, placeholder: 'e.g. Electronic components, Textiles, Pharmaceutical raw materials' },
+        { name: 'origin', label: 'Country of Origin', type: 'text', required: true, placeholder: 'e.g. China, Germany, USA' },
+        { name: 'destination', label: 'Destination Country', type: 'text', required: true, placeholder: 'e.g. India, United Kingdom, UAE' },
+        { name: 'hs_code', label: 'HS / Customs Code (optional)', type: 'text', required: false, placeholder: 'e.g. 8471.30 for laptops' },
+        { name: 'value', label: 'Approximate Shipment Value', type: 'text', required: false, placeholder: 'e.g. USD 15,000 CIF' },
+        { name: 'requirements', label: 'Special Requirements', type: 'textarea', required: false, placeholder: 'Perishables, hazmat, dual-use goods, FTA preferences...' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Warehouse Operations SOP',
+      slug: 'warehouse-sop-writer',
+      icon: '🏭',
+      description: 'Write clear warehouse SOPs, operational procedures, and process guides.',
+      industryId: bySlug('logistics'),
+      systemPrompt: 'You are a warehouse operations manager and process documentation specialist. You write clear, practical SOPs that warehouse teams can follow without confusion. Your procedures reduce errors, improve efficiency, and ensure safety and compliance.',
+      userPromptTemplate: `Write a warehouse SOP for:
+
+Process / operation: {process}
+Warehouse type: {warehouse_type}
+Team role performing this: {team_role}
+Equipment / systems involved: {equipment}
+Safety requirements: {safety}
+Key performance targets: {kpi}
+Special notes: {notes}
+
+Provide:
+1. **SOP Title, Scope & Objective**
+2. **Prerequisites** (training, PPE, access needed)
+3. **Step-by-Step Procedure** (numbered, with decision points)
+4. **Quality Checks** at critical steps
+5. **Safety Precautions**
+6. **Common Errors & How to Avoid Them**
+7. **KPIs to Measure Performance**
+8. **Exception Handling** (what to do if something goes wrong)
+9. **Document Control** (version, review date)`,
+      fields: [
+        { name: 'process', label: 'Process / Operation', type: 'select', required: true, options: ['Inbound receiving & inspection', 'Put-away & storage', 'Order picking (single / batch)', 'Packing & dispatch', 'Inventory cycle count', 'Returns processing', 'Cold chain / temperature-controlled handling', 'Hazardous materials handling', 'Loading / unloading dock operations'] },
+        { name: 'warehouse_type', label: 'Warehouse Type', type: 'select', required: false, options: ['Dry goods / general merchandise', 'Cold storage / FMCG', 'E-commerce fulfilment centre', 'Pharmaceutical / healthcare', 'Automotive parts', 'Raw materials / manufacturing'] },
+        { name: 'team_role', label: 'Team Role Performing This', type: 'text', required: false, placeholder: 'e.g. Warehouse associate, Picker-packer, Inbound team' },
+        { name: 'equipment', label: 'Equipment / Systems Involved', type: 'text', required: false, placeholder: 'e.g. WMS software, barcode scanners, forklift, conveyor' },
+        { name: 'safety', label: 'Key Safety Requirements', type: 'textarea', required: false, placeholder: 'PPE, load limits, restricted zones, safety signage...' },
+        { name: 'kpi', label: 'Key Performance Targets', type: 'text', required: false, placeholder: 'e.g. 99.5% accuracy, 50 picks/hour, zero safety incidents' },
+        { name: 'notes', label: 'Special Notes / Context', type: 'textarea', required: false, placeholder: 'Any specific compliance, audit, or operational requirements...' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── AGRICULTURE (additional) ─────────────────────────────────────────────
+    {
+      name: 'Agricultural Loan Application',
+      slug: 'agricultural-loan-application',
+      icon: '🏦',
+      description: 'Write agricultural loan applications for Kisan Credit Card, crop loans, and farm equipment finance.',
+      industryId: bySlug('agriculture'),
+      systemPrompt: 'You are an agricultural finance specialist and rural banking expert. You help farmers and agribusinesses write clear, compelling loan applications that meet bank and NABARD requirements. You know what agricultural lenders need to see to approve credit.',
+      userPromptTemplate: `Write an agricultural loan application for:
+
+Loan type: {loan_type}
+Applicant details: {applicant}
+Farm details: {farm_details}
+Crop / purpose: {crop_purpose}
+Loan amount requested: {amount}
+Repayment plan: {repayment}
+Collateral: {collateral}
+Bank / institution: {bank}
+
+Provide:
+1. **Formal Loan Application Letter**
+2. **Farm Profile Summary**
+3. **Loan Purpose & Utilisation Plan**
+4. **Repayment Capacity Justification** (income estimate)
+5. **Collateral Summary**
+6. **Documents Checklist** for the bank`,
+      fields: [
+        { name: 'loan_type', label: 'Loan Type', type: 'select', required: true, options: ['Crop loan / Kisan Credit Card (KCC)', 'Farm equipment / tractor loan', 'Irrigation / water infrastructure', 'Horticulture / plantation loan', 'Warehouse / storage facility', 'Agri-business / processing unit', 'Animal husbandry / fisheries', 'MSME agri-enterprise loan'] },
+        { name: 'applicant', label: 'Applicant Details', type: 'textarea', required: true, placeholder: 'Name, age, address, land holding, farming experience...' },
+        { name: 'farm_details', label: 'Farm Details', type: 'textarea', required: true, placeholder: 'Area, location, land ownership/lease, soil type, irrigation...' },
+        { name: 'crop_purpose', label: 'Crop / Loan Purpose', type: 'textarea', required: true, placeholder: 'What crops are grown / what will the loan fund specifically?' },
+        { name: 'amount', label: 'Loan Amount Required', type: 'text', required: true, placeholder: 'e.g. ₹3,00,000' },
+        { name: 'repayment', label: 'Proposed Repayment Plan', type: 'text', required: false, placeholder: 'e.g. Post-harvest lump sum in November, 3-year EMI plan' },
+        { name: 'collateral', label: 'Collateral / Security Offered', type: 'text', required: false, placeholder: 'e.g. Agricultural land, hypothecation of equipment' },
+        { name: 'bank', label: 'Bank / Institution', type: 'text', required: false, placeholder: 'e.g. State Bank of India, NABARD, Regional Rural Bank' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 3,
+    },
+    {
+      name: 'Crop Insurance Claim Writer',
+      slug: 'crop-insurance-claim',
+      icon: '🌧️',
+      description: 'Write structured crop insurance claim letters with loss assessment details.',
+      industryId: bySlug('agriculture'),
+      systemPrompt: 'You are an agricultural insurance specialist. You help farmers write clear, well-documented crop insurance claims that include all required information, reference the correct scheme, and maximise the chance of timely settlement.',
+      userPromptTemplate: `Write a crop insurance claim for:
+
+Scheme: {scheme}
+Farmer details: {farmer}
+Policy details: {policy}
+Crop and area: {crop}
+Cause of loss: {cause}
+Loss assessment: {loss_details}
+Date of damage: {damage_date}
+Bank / insurance office: {recipient}
+
+Provide:
+1. **Formal Claim Letter** (ready to submit)
+2. **Loss Assessment Summary**
+3. **Supporting Documents Checklist**
+4. **Follow-up Timeline** (typical PMFBY / scheme process)`,
+      fields: [
+        { name: 'scheme', label: 'Insurance Scheme', type: 'select', required: true, options: ['PMFBY (Pradhan Mantri Fasal Bima Yojana)', 'RWBCIS (Restructured Weather Based)', 'State government scheme', 'Private crop insurance policy', 'Other'] },
+        { name: 'farmer', label: 'Farmer Details', type: 'textarea', required: true, placeholder: 'Name, address, mobile, Aadhaar, bank account...' },
+        { name: 'policy', label: 'Policy / Application Details', type: 'text', required: false, placeholder: 'Policy number, season, sum insured...' },
+        { name: 'crop', label: 'Crop Type & Area', type: 'text', required: true, placeholder: 'e.g. Cotton — 2.5 acres, Paddy — 1 hectare' },
+        { name: 'cause', label: 'Cause of Crop Loss', type: 'select', required: true, options: ['Drought / insufficient rainfall', 'Flood / excess rainfall', 'Hailstorm', 'Cyclone / high winds', 'Pest & disease outbreak', 'Cold wave / frost', 'Fire', 'Other natural calamity'] },
+        { name: 'loss_details', label: 'Loss Assessment Details', type: 'textarea', required: true, placeholder: 'Estimated % loss, yield before/after, visible damage description...' },
+        { name: 'damage_date', label: 'Date of Damage', type: 'text', required: true, placeholder: 'e.g. 15 September 2025' },
+        { name: 'recipient', label: 'Bank / Insurance Office', type: 'text', required: false, placeholder: 'Bank branch name or insurance company office' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Market Price & Commodity Report',
+      slug: 'agri-market-price-report',
+      icon: '📊',
+      description: 'Generate commodity price analysis reports and market outlook summaries for farmers.',
+      industryId: bySlug('agriculture'),
+      systemPrompt: 'You are an agricultural market analyst. You produce clear, practical commodity and market reports that help farmers and agribusinesses make informed selling decisions. You translate market data into plain-language advice and strategic recommendations.',
+      userPromptTemplate: `Generate an agricultural market report for:
+
+Commodity: {commodity}
+Market / APMC: {market}
+Current prices: {prices}
+Season context: {season}
+Demand drivers: {demand_drivers}
+Supply situation: {supply}
+Audience: {audience}
+
+Provide:
+1. **Market Summary** (current price & 1-week trend)
+2. **Price Comparison** (local mandi vs. MSP vs. state average)
+3. **Demand & Supply Analysis**
+4. **Key Price Drivers This Week**
+5. **3-4 Week Outlook**
+6. **Farmer Recommendations** (sell now / store / forward contract)
+7. **Nearby Alternative Markets** to consider`,
+      fields: [
+        { name: 'commodity', label: 'Commodity / Crop', type: 'text', required: true, placeholder: 'e.g. Soybean, Onion, Cotton, Tomato, Wheat' },
+        { name: 'market', label: 'Market / APMC Name', type: 'text', required: true, placeholder: 'e.g. Pune APMC, Lasalgaon, APMC Bangalore' },
+        { name: 'prices', label: 'Current Price Data', type: 'textarea', required: true, placeholder: 'Today\'s rates, last week\'s rates, MSP if applicable...' },
+        { name: 'season', label: 'Season / Harvest Context', type: 'text', required: false, placeholder: 'e.g. Post-harvest Kharif, peak arrival season, off-season' },
+        { name: 'demand_drivers', label: 'Known Demand Drivers', type: 'textarea', required: false, placeholder: 'Festive demand, export orders, processing industry demand...' },
+        { name: 'supply', label: 'Supply Situation', type: 'textarea', required: false, placeholder: 'Arrival volumes, cold storage stocks, crop damage reports...' },
+        { name: 'audience', label: 'Audience', type: 'select', required: false, options: ['Individual farmer', 'Farmer producer organisation (FPO)', 'Trader / commission agent', 'Agri-business / processor', 'Government extension officer'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── SOFTWARE DEV / IT (additional) ──────────────────────────────────────
+    {
+      name: 'Sprint & Project Status Report',
+      slug: 'sprint-project-status-report',
+      icon: '📋',
+      description: 'Generate sprint summaries, project status reports, and engineering update emails.',
+      industryId: bySlug('software-it'),
+      systemPrompt: 'You are a technical project manager and engineering communicator. You write clear, honest project status reports that keep stakeholders informed, highlight blockers, celebrate wins, and always end with clear next steps. You translate technical progress into business-readable language.',
+      userPromptTemplate: `Write a {report_type}:
+
+Project / sprint name: {project}
+Period covered: {period}
+Team: {team}
+Planned work: {planned}
+Completed work: {completed}
+In progress: {in_progress}
+Blockers / risks: {blockers}
+Next period goals: {next_goals}
+Audience: {audience}
+
+Provide a clear, professional update with: overall status RAG indicator, progress summary, key achievements, blockers and mitigation, metrics (velocity / burn-down if relevant), and a crisp next-steps section.`,
+      fields: [
+        { name: 'report_type', label: 'Report Type', type: 'select', required: true, options: ['Sprint retrospective + next sprint plan', 'Weekly engineering update', 'Monthly project status report', 'Executive project dashboard update', 'Product launch readiness report', 'Post-mortem / incident review'] },
+        { name: 'project', label: 'Project / Sprint Name', type: 'text', required: true, placeholder: 'e.g. Sprint 23 — Payments v2, Q2 Platform Migration' },
+        { name: 'period', label: 'Period Covered', type: 'text', required: true, placeholder: 'e.g. 5-19 May 2025, Week 20' },
+        { name: 'team', label: 'Team', type: 'text', required: false, placeholder: 'Team name and approximate size' },
+        { name: 'planned', label: 'Planned Work / Goals', type: 'textarea', required: true, placeholder: 'What was committed for this period?' },
+        { name: 'completed', label: 'Completed Work', type: 'textarea', required: true, placeholder: 'What was actually delivered / completed?' },
+        { name: 'in_progress', label: 'Work In Progress', type: 'textarea', required: false, placeholder: 'Items started but not yet done...' },
+        { name: 'blockers', label: 'Blockers & Risks', type: 'textarea', required: false, placeholder: 'What is slowing things down? Dependencies, risks...' },
+        { name: 'next_goals', label: 'Next Period Goals', type: 'textarea', required: true, placeholder: 'What is the team committing to next?' },
+        { name: 'audience', label: 'Report Audience', type: 'select', required: false, options: ['Engineering team (internal)', 'Product & tech leadership', 'Executive / C-suite', 'Client / external stakeholder'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'IT Incident Postmortem Report',
+      slug: 'it-incident-postmortem',
+      icon: '🔴',
+      description: 'Write blameless IT postmortem reports with root cause analysis and action items.',
+      industryId: bySlug('software-it'),
+      systemPrompt: 'You are an SRE and incident management specialist. You facilitate blameless postmortems that identify root causes, document timelines accurately, and produce clear action items that prevent recurrence. Your reports build trust and improve system reliability.',
+      userPromptTemplate: `Write an IT incident postmortem for:
+
+Incident title: {incident_title}
+Severity: {severity}
+Date & duration: {date_duration}
+Systems affected: {systems}
+User / business impact: {impact}
+Timeline of events: {timeline}
+Root cause(s): {root_cause}
+Immediate fix applied: {fix}
+Contributing factors: {contributing_factors}
+
+Produce a complete blameless postmortem with:
+1. **Incident Summary** (severity, duration, impact)
+2. **Detection & Response Timeline**
+3. **Root Cause Analysis** (5-whys or fishbone)
+4. **Contributing Factors**
+5. **What Went Well**
+6. **What Could Be Improved**
+7. **Action Items** (owner, deadline per item)
+8. **Metrics** (MTTD, MTTR)
+9. **Communication Log Summary**`,
+      fields: [
+        { name: 'incident_title', label: 'Incident Title', type: 'text', required: true, placeholder: 'e.g. Payment service outage — 19 May 2025' },
+        { name: 'severity', label: 'Severity / Priority Level', type: 'select', required: true, options: ['SEV-1 (Critical — complete outage)', 'SEV-2 (High — major feature down)', 'SEV-3 (Medium — partial degradation)', 'SEV-4 (Low — minor issue)'] },
+        { name: 'date_duration', label: 'Date & Duration', type: 'text', required: true, placeholder: 'e.g. 19 May 2025, 14:32–17:05 IST (2h 33m)' },
+        { name: 'systems', label: 'Systems / Services Affected', type: 'textarea', required: true, placeholder: 'Which services, APIs, or infrastructure components were affected?' },
+        { name: 'impact', label: 'User & Business Impact', type: 'textarea', required: true, placeholder: 'Users affected, revenue impact, SLA breach, reputational impact...' },
+        { name: 'timeline', label: 'Chronological Timeline', type: 'textarea', required: true, placeholder: 'Time: event (e.g. 14:32 — alerts fired, 14:45 — team paged, 15:10 — root cause identified...)' },
+        { name: 'root_cause', label: 'Root Cause(s)', type: 'textarea', required: true, placeholder: 'What fundamentally caused the incident?' },
+        { name: 'fix', label: 'Immediate Fix Applied', type: 'textarea', required: true, placeholder: 'What was done to resolve the incident?' },
+        { name: 'contributing_factors', label: 'Contributing Factors', type: 'textarea', required: false, placeholder: 'Missing monitoring, lack of runbook, deployment without testing, etc.' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── AUTOMOBILE / RTO (additional) ────────────────────────────────────────
+    {
+      name: 'Traffic Challan Response Letter',
+      slug: 'traffic-challan-response',
+      icon: '🚦',
+      description: 'Draft formal responses to traffic challans, fines, and RTO show-cause notices.',
+      industryId: bySlug('automobile-rto'),
+      systemPrompt: 'You are an RTO legal advisor and traffic law specialist. You draft precise, respectful, and legally sound responses to traffic challans and RTO notices that clearly state the facts, reference applicable rules, and seek fair resolution.',
+      userPromptTemplate: `Draft a response to a traffic challan / notice:
+
+Notice type: {notice_type}
+Issuing authority: {authority}
+Vehicle details: {vehicle}
+Challan / notice details: {challan_details}
+Owner / driver response: {response_basis}
+Date of alleged offence: {offence_date}
+Supporting documents available: {documents}
+
+Provide:
+1. **Formal Response Letter** (to the RTO/traffic authority)
+2. **Facts Stated** clearly
+3. **Legal / Rule Reference** (where applicable)
+4. **Supporting Arguments**
+5. **Relief Requested**
+6. **Documents to Attach**`,
+      fields: [
+        { name: 'notice_type', label: 'Notice / Challan Type', type: 'select', required: true, options: ['Traffic challan (e-challan)', 'Rash driving notice', 'Overloading challan', 'Fitness certificate violation', 'RTO show-cause notice', 'Permit violation', 'Insurance/PUC violation notice', 'RC renewal / tax default notice'] },
+        { name: 'authority', label: 'Issuing Authority', type: 'text', required: true, placeholder: 'e.g. Traffic Police, Regional Transport Officer (RTO), Motor Vehicle Inspector' },
+        { name: 'vehicle', label: 'Vehicle Details', type: 'text', required: true, placeholder: 'Registration number, make/model' },
+        { name: 'challan_details', label: 'Challan / Notice Details', type: 'textarea', required: true, placeholder: 'Challan number, offence alleged, amount, section violated...' },
+        { name: 'response_basis', label: 'Basis for Your Response', type: 'textarea', required: true, placeholder: 'Were the facts incorrect? Was the vehicle not present? Technical error? Genuine defence?' },
+        { name: 'offence_date', label: 'Date of Alleged Offence', type: 'text', required: false, placeholder: 'e.g. 10 April 2025' },
+        { name: 'documents', label: 'Supporting Documents Available', type: 'text', required: false, placeholder: 'e.g. Insurance copy, RC, GPS records, photos, court paper' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 3,
+    },
+    {
+      name: 'Vehicle Loan Closure & Hypothecation Removal',
+      slug: 'vehicle-loan-closure-letter',
+      icon: '🏦',
+      description: 'Draft loan closure confirmation requests and hypothecation removal letters for vehicles.',
+      industryId: bySlug('automobile-rto'),
+      systemPrompt: 'You are an automotive finance and RTO documentation specialist. You draft clear, professional letters for vehicle loan closures and hypothecation removal processes that banks, financiers, and RTOs accept without issue. You include all legally required information.',
+      userPromptTemplate: `Draft a {document_type}:
+
+Loan account details: {loan_details}
+Vehicle details: {vehicle}
+Owner details: {owner}
+Financer / bank: {financer}
+Loan closure details: {closure_info}
+RTO jurisdiction: {rto}
+Request or action needed: {request}
+
+Produce a complete, formal letter with all required details, proper format, and clear request for action.`,
+      fields: [
+        { name: 'document_type', label: 'Document Type', type: 'select', required: true, options: ['Loan closure confirmation request (to bank)', 'NOC request from financer', 'Hypothecation removal application (to RTO)', 'Form 35 (hypothecation cancellation) cover letter', 'Financer NOC follow-up letter', 'RC book correction application (post-hypothecation removal)'] },
+        { name: 'loan_details', label: 'Loan Account Details', type: 'text', required: true, placeholder: 'Loan account number, bank name, original loan amount' },
+        { name: 'vehicle', label: 'Vehicle Details', type: 'text', required: true, placeholder: 'Registration number, make/model, chassis & engine number' },
+        { name: 'owner', label: 'Vehicle Owner Details', type: 'textarea', required: true, placeholder: 'Name, address, contact, Aadhaar/PAN' },
+        { name: 'financer', label: 'Financer / Bank Details', type: 'text', required: true, placeholder: 'Bank/NBFC name, branch, contact' },
+        { name: 'closure_info', label: 'Loan Closure Details', type: 'text', required: false, placeholder: 'e.g. Final EMI paid on 15 April 2025, Loan closed in full' },
+        { name: 'rto', label: 'RTO Jurisdiction', type: 'text', required: false, placeholder: 'e.g. RTO Mumbai (MH-01), RTO Bengaluru South (KA-41)' },
+        { name: 'request', label: 'Specific Request / Action Needed', type: 'textarea', required: true, placeholder: 'What exactly do you need the recipient to do?' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Driving Licence Application Guide',
+      slug: 'driving-licence-guide',
+      icon: '🪪',
+      description: 'Generate step-by-step driving licence application guides for learner and permanent licences.',
+      industryId: bySlug('automobile-rto'),
+      systemPrompt: 'You are an RTO process expert. You produce clear, step-by-step driving licence application guides that cover the exact documents, tests, fees, and portal procedures for any state or licence category. You save applicants time and repeated RTO visits.',
+      userPromptTemplate: `Generate a driving licence application guide for:
+
+Licence type: {licence_type}
+Vehicle category: {vehicle_category}
+State / RTO: {state}
+Applicant type: {applicant_type}
+Age / special notes: {age_notes}
+
+Provide:
+1. **Eligibility Criteria**
+2. **Documents Required** (original + attested copies)
+3. **Step-by-Step Application Process** (online Sarathi portal + offline)
+4. **Tests Involved** (written / driving test — what to expect)
+5. **Fees Breakdown**
+6. **Timeline** (from application to licence receipt)
+7. **Common Rejection Reasons** to avoid
+8. **Useful Links & Helpline Numbers**`,
+      fields: [
+        { name: 'licence_type', label: 'Licence Type', type: 'select', required: true, options: ['Learner\'s Licence (LLR) — new applicant', 'Permanent Driving Licence (DL) — first time', 'DL Renewal', 'Adding a new vehicle class to existing DL', 'Duplicate DL (lost/damaged)', 'International Driving Permit (IDP)', 'Commercial vehicle licence (LMV-TR)', 'Heavy Motor Vehicle (HMV) licence'] },
+        { name: 'vehicle_category', label: 'Vehicle Category', type: 'select', required: true, options: ['Two-wheeler (Motorcycle / Scooter)', 'Four-wheeler (Private car / LMV)', 'Both two and four-wheeler', 'Commercial vehicle (transport)', 'Heavy commercial vehicle', 'All categories'] },
+        { name: 'state', label: 'State / RTO', type: 'text', required: true, placeholder: 'e.g. Maharashtra, Karnataka (Bengaluru), Delhi, Tamil Nadu' },
+        { name: 'applicant_type', label: 'Applicant Type', type: 'select', required: false, options: ['First-time applicant (18+)', 'Applicant with prior licence from another state', 'Applicant with international licence', 'Minor (MCWOG — 16-18 years, restricted)'] },
+        { name: 'age_notes', label: 'Age / Special Notes', type: 'text', required: false, placeholder: 'e.g. 17 years old, NRI returning to India, senior citizen' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── GOVERNMENT & NGO (additional) ────────────────────────────────────────
+    {
+      name: 'RTI Application Writer',
+      slug: 'rti-application-writer',
+      icon: '📜',
+      description: 'Draft precise RTI (Right to Information) applications to get the information you need.',
+      industryId: bySlug('government-ngo'),
+      systemPrompt: 'You are an RTI expert and public information law specialist. You draft precise, legally correct RTI applications that clearly request specific information, reference the correct provisions, and are formatted to maximise the chance of a complete, timely response.',
+      userPromptTemplate: `Draft an RTI application:
+
+Information sought: {information_sought}
+Public Authority / department: {department}
+Applicant details: {applicant}
+Purpose (brief, optional): {purpose}
+Time period of information: {time_period}
+Specific documents requested: {documents}
+State / jurisdiction: {jurisdiction}
+
+Provide:
+1. **RTI Application** (ready to submit — formatted per RTI Act 2005)
+2. **Specific Questions** numbered and clearly worded
+3. **Document Requests** listed separately
+4. **Filing Instructions** (online portal / physical submission)
+5. **What to Do If Denied or Partially Responded To**`,
+      fields: [
+        { name: 'information_sought', label: 'Information / Topic', type: 'textarea', required: true, placeholder: 'What information do you want to obtain?' },
+        { name: 'department', label: 'Public Authority / Department', type: 'text', required: true, placeholder: 'e.g. Municipal Corporation of Greater Mumbai, NHAI, Income Tax Department' },
+        { name: 'applicant', label: 'Applicant Details', type: 'text', required: true, placeholder: 'Name, address — RTI requires Indian citizen identification' },
+        { name: 'purpose', label: 'Brief Purpose (optional)', type: 'text', required: false, placeholder: 'RTI does not require stating purpose, but can help if provided' },
+        { name: 'time_period', label: 'Time Period of Information', type: 'text', required: false, placeholder: 'e.g. 1 April 2022 to 31 March 2025' },
+        { name: 'documents', label: 'Specific Documents Requested', type: 'textarea', required: false, placeholder: 'Any specific files, registers, minutes, approvals, reports...' },
+        { name: 'jurisdiction', label: 'State / Jurisdiction', type: 'text', required: true, placeholder: 'e.g. Maharashtra, Central (Union of India), Karnataka' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'NGO Annual Report Generator',
+      slug: 'ngo-annual-report',
+      icon: '📊',
+      description: 'Create compelling NGO annual reports that inspire donors and demonstrate impact.',
+      industryId: bySlug('government-ngo'),
+      systemPrompt: 'You are an NGO communications specialist and impact reporting expert. You write compelling annual reports that tell the story of impact, build donor trust, meet FCRA / regulatory transparency requirements, and inspire continued and new funding.',
+      userPromptTemplate: `Generate an NGO annual report for:
+
+Organisation name: {org_name}
+Reporting year: {year}
+Mission statement: {mission}
+Programmes run: {programmes}
+Beneficiaries reached: {beneficiaries}
+Key outcomes & impact data: {impact}
+Financial summary: {financials}
+Challenges faced: {challenges}
+Goals for next year: {next_year_goals}
+Key donors / partners: {donors}
+
+Provide:
+1. **Chairman / ED's Message**
+2. **Organisation Overview & Mission**
+3. **Year at a Glance** (key stats in visual format)
+4. **Programme Highlights** (story + data per programme)
+5. **Impact Stories** (1-2 beneficiary narratives)
+6. **Financial Summary** (income, expenditure, utilisation)
+7. **Acknowledgements** (donors, partners, volunteers)
+8. **Goals for the Year Ahead**
+9. **Call to Action** (donate, partner, volunteer)`,
+      fields: [
+        { name: 'org_name', label: 'Organisation Name', type: 'text', required: true, placeholder: 'Your NGO / Trust name' },
+        { name: 'year', label: 'Reporting Year', type: 'text', required: true, placeholder: 'e.g. FY 2024-25 (April 2024 – March 2025)' },
+        { name: 'mission', label: 'Mission Statement', type: 'textarea', required: true, placeholder: 'Your organisation\'s mission and vision...' },
+        { name: 'programmes', label: 'Programmes Run', type: 'textarea', required: true, placeholder: 'List and briefly describe each programme...' },
+        { name: 'beneficiaries', label: 'Beneficiaries Reached', type: 'text', required: true, placeholder: 'Total numbers and key demographics' },
+        { name: 'impact', label: 'Key Outcomes & Impact Data', type: 'textarea', required: true, placeholder: 'Quantitative and qualitative outcomes per programme...' },
+        { name: 'financials', label: 'Financial Summary', type: 'textarea', required: true, placeholder: 'Total income, expenditure, % utilisation, sources of funds...' },
+        { name: 'challenges', label: 'Challenges Faced', type: 'textarea', required: false, placeholder: 'Honest reflection on difficulties and how they were addressed...' },
+        { name: 'next_year_goals', label: 'Goals for Next Year', type: 'textarea', required: false, placeholder: 'Targets, new programmes, expansion plans...' },
+        { name: 'donors', label: 'Key Donors & Partners', type: 'text', required: false, placeholder: 'Major funders and partners to acknowledge' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── WEDDING (additional) ─────────────────────────────────────────────────
+    {
+      name: 'Wedding Budget Planner',
+      slug: 'wedding-budget-planner',
+      icon: '💰',
+      description: 'Create detailed wedding budgets with category breakdowns and cost-saving tips.',
+      industryId: bySlug('wedding'),
+      systemPrompt: 'You are a professional wedding planner and financial advisor for events. You create detailed, realistic wedding budgets that help couples allocate funds wisely, identify savings opportunities, and avoid common budget traps. You are practical, thorough, and empathetic.',
+      userPromptTemplate: `Create a wedding budget plan for:
+
+Total budget: {total_budget}
+Wedding type: {wedding_type}
+Guest count: {guests}
+Location: {location}
+Events included: {events}
+Priority areas: {priorities}
+Cost-saving areas: {savings_areas}
+
+Provide:
+1. **Budget Summary Table** (% and amount per category)
+2. **Category Breakdown** (detailed line items per category)
+3. **Estimated Total vs. Budget** comparison
+4. **Cost-Saving Tips** for specific categories
+5. **Contingency Reserve** recommendation (10-15%)
+6. **Payment Timeline** (when to pay vendors)
+7. **Budget Tracking Tips**`,
+      fields: [
+        { name: 'total_budget', label: 'Total Wedding Budget', type: 'text', required: true, placeholder: 'e.g. ₹10,00,000 / $15,000' },
+        { name: 'wedding_type', label: 'Wedding Type', type: 'select', required: true, options: ['Intimate / small wedding (under 50)', 'Medium wedding (50-150)', 'Large wedding (150-300)', 'Grand wedding (300+)', 'Destination wedding', 'Court marriage + small celebration'] },
+        { name: 'guests', label: 'Expected Guest Count', type: 'text', required: true, placeholder: 'e.g. 150 guests total across all events' },
+        { name: 'location', label: 'Location / City', type: 'text', required: true, placeholder: 'e.g. Mumbai, Goa (destination), Delhi NCR' },
+        { name: 'events', label: 'Events to Budget For', type: 'text', required: true, placeholder: 'e.g. Mehendi, Sangeet, Wedding ceremony, Reception' },
+        { name: 'priorities', label: 'Priority Splurge Areas', type: 'text', required: false, placeholder: 'Where should the most money go? e.g. Photography, food, décor' },
+        { name: 'savings_areas', label: 'Areas to Save On', type: 'text', required: false, placeholder: 'Where is the couple happy to cut costs?' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Wedding Thank You Notes',
+      slug: 'wedding-thank-you-notes',
+      icon: '💌',
+      description: 'Write personalised wedding thank you notes and acknowledgement messages.',
+      industryId: bySlug('wedding'),
+      systemPrompt: 'You are a wedding stationery and etiquette specialist. You write warm, genuine thank you notes that make recipients feel truly appreciated. Each note feels personal and specific, not like a template mass-produced by a robot.',
+      userPromptTemplate: `Write wedding thank you notes for:
+
+Couple names: {couple}
+Recipient type: {recipient_type}
+Specific gift or gesture: {gift_gesture}
+Personal memory or note: {personal_note}
+Tone / style: {style}
+Number of variations: {variations}
+
+Write {variations} personalised thank you note variation(s) that feel warm and authentic. Include a short version for card format and a longer version for email or letter format.`,
+      fields: [
+        { name: 'couple', label: 'Couple Names', type: 'text', required: true, placeholder: 'e.g. Priya & Arjun' },
+        { name: 'recipient_type', label: 'Recipient Type', type: 'select', required: true, options: ['Wedding guest (gift)', 'Vendor / supplier', 'Parents of couple', 'Bridal party / best man / bridesmaid', 'Colleague or work acquaintance', 'Distant relative', 'Friend who travelled far'] },
+        { name: 'gift_gesture', label: 'Specific Gift or Gesture to Mention', type: 'text', required: false, placeholder: 'e.g. Cash gift of ₹5,000, silver cutlery set, helped with decorations' },
+        { name: 'personal_note', label: 'Personal Memory or Note (optional)', type: 'text', required: false, placeholder: 'A specific moment with this person, or something unique about them...' },
+        { name: 'style', label: 'Style', type: 'select', required: false, options: ['Warm & heartfelt', 'Formal & traditional', 'Playful & fun', 'Religious / spiritual'] },
+        { name: 'variations', label: 'Number of Variations', type: 'select', required: false, options: ['1', '2', '3', '5'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── HOSPITALITY & TRAVEL (additional) ───────────────────────────────────
+    {
+      name: 'Guest Review Response',
+      slug: 'guest-review-response',
+      icon: '⭐',
+      description: 'Write professional, brand-appropriate responses to hotel and restaurant reviews.',
+      industryId: bySlug('hospitality-travel'),
+      systemPrompt: 'You are a hospitality reputation management specialist. You craft responses to guest reviews that thank positive reviewers authentically, address negative reviews with empathy and professionalism, and always protect the brand. You know that review responses are read by future guests as much as the original reviewer.',
+      userPromptTemplate: `Write a review response for:
+
+Property name: {property}
+Review platform: {platform}
+Star rating: {rating}
+Guest review text: {review}
+Guest name: {guest_name}
+Specific issue to address: {issue}
+Resolution offered (if any): {resolution}
+Brand tone: {tone}
+
+Write a response (under 150 words) that is authentic, addresses the key points, thanks the guest, and ends with an invitation to return.`,
+      fields: [
+        { name: 'property', label: 'Property Name', type: 'text', required: true, placeholder: 'Hotel / resort / restaurant name' },
+        { name: 'platform', label: 'Review Platform', type: 'select', required: true, options: ['TripAdvisor', 'Google Reviews', 'Booking.com', 'Expedia', 'Zomato', 'Swiggy', 'MakeMyTrip', 'Airbnb', 'Other'] },
+        { name: 'rating', label: 'Guest Rating', type: 'select', required: true, options: ['5 stars (positive)', '4 stars (mostly positive)', '3 stars (mixed)', '2 stars (negative)', '1 star (very negative)'] },
+        { name: 'review', label: 'Guest Review Text', type: 'textarea', required: true, placeholder: 'Paste the guest review here...' },
+        { name: 'guest_name', label: 'Guest Name / Handle', type: 'text', required: false, placeholder: 'Reviewer\'s name or username' },
+        { name: 'issue', label: 'Main Issue to Address', type: 'text', required: false, placeholder: 'Specific complaint or concern raised...' },
+        { name: 'resolution', label: 'Resolution Offered (if applicable)', type: 'text', required: false, placeholder: 'e.g. Refund offered, issue fixed, invited back with discount' },
+        { name: 'tone', label: 'Brand Tone', type: 'select', required: false, options: ['Luxury / refined', 'Warm & friendly', 'Professional', 'Boutique / personal'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 3,
+    },
+    {
+      name: 'Tour Package Description',
+      slug: 'tour-package-description',
+      icon: '🗺️',
+      description: 'Write compelling tour package descriptions that sell destinations and experiences.',
+      industryId: bySlug('hospitality-travel'),
+      systemPrompt: 'You are a travel copywriter and destination marketing specialist. You write tour package descriptions that sell the experience, not just the itinerary. You create wanderlust, communicate value, and give travellers confidence to book. Your descriptions are vivid, accurate, and benefit-focused.',
+      userPromptTemplate: `Write a tour package description for:
+
+Package name: {package_name}
+Destination(s): {destinations}
+Duration: {duration}
+Inclusions: {inclusions}
+Exclusions: {exclusions}
+Target traveller: {target}
+Price: {price}
+Unique highlights: {highlights}
+Travel style: {travel_style}
+
+Provide:
+1. **Attention-grabbing headline**
+2. **Package Overview** (150-200 words — sell the experience)
+3. **Day-wise Highlights** (brief summary)
+4. **What's Included** (checklist)
+5. **What's Not Included**
+6. **Price & Starting From** line
+7. **Why Book This Package** (3 key reasons)
+8. **Booking CTA**`,
+      fields: [
+        { name: 'package_name', label: 'Package Name', type: 'text', required: true, placeholder: 'e.g. Kerala Backwaters Escape, Golden Triangle 7N/8D' },
+        { name: 'destinations', label: 'Destinations Covered', type: 'text', required: true, placeholder: 'e.g. Kochi, Alleppey, Munnar' },
+        { name: 'duration', label: 'Duration', type: 'text', required: true, placeholder: 'e.g. 6 nights / 7 days' },
+        { name: 'inclusions', label: 'What\'s Included', type: 'textarea', required: true, placeholder: 'Hotel, meals, transport, tours, guides, permits...' },
+        { name: 'exclusions', label: 'What\'s NOT Included', type: 'text', required: false, placeholder: 'e.g. Flights, visa, personal expenses, travel insurance' },
+        { name: 'target', label: 'Target Traveller', type: 'select', required: false, options: ['Couple / romantic', 'Family with kids', 'Solo traveller', 'Group of friends', 'Senior citizens', 'Honeymoon', 'Corporate / MICE group'] },
+        { name: 'price', label: 'Price / Starting From', type: 'text', required: false, placeholder: 'e.g. Starting from ₹18,500 per person (twin sharing)' },
+        { name: 'highlights', label: 'Unique Highlights', type: 'textarea', required: false, placeholder: 'What makes this package special or different?' },
+        { name: 'travel_style', label: 'Travel Style', type: 'select', required: false, options: ['Budget / value', 'Standard / comfortable', 'Premium / deluxe', 'Luxury', 'Adventure / active', 'Cultural & heritage'] },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Visa & Travel Document Guide',
+      slug: 'visa-travel-document-guide',
+      icon: '🛂',
+      description: 'Generate visa application guides and travel document checklists for any destination.',
+      industryId: bySlug('hospitality-travel'),
+      systemPrompt: 'You are an international travel documentation specialist. You produce accurate, step-by-step visa guides and travel document checklists that help travellers apply confidently. You note important caveats, common refusal reasons, and latest requirements.',
+      userPromptTemplate: `Generate a visa and travel document guide for:
+
+Traveller nationality: {nationality}
+Destination country: {destination}
+Travel purpose: {purpose}
+Duration of stay: {duration}
+Visa type: {visa_type}
+Special circumstances: {special}
+
+Provide:
+1. **Visa Requirement Overview** (visa required / visa-free / e-visa)
+2. **Documents Required** (complete checklist)
+3. **Application Process** (step-by-step)
+4. **Fees & Processing Time**
+5. **Important Notes & Common Rejection Reasons**
+6. **Other Travel Documents to Carry**
+7. **Emergency Contacts** (embassy, consulate)
+8. **Pro Tips for a Successful Application**`,
+      fields: [
+        { name: 'nationality', label: 'Traveller Nationality / Passport', type: 'text', required: true, placeholder: 'e.g. Indian passport holder, British citizen' },
+        { name: 'destination', label: 'Destination Country', type: 'text', required: true, placeholder: 'e.g. Thailand, USA, Schengen (Europe), UAE' },
+        { name: 'purpose', label: 'Travel Purpose', type: 'select', required: true, options: ['Tourism / holiday', 'Business visit', 'Medical treatment', 'Education / student visa', 'Family visit', 'Work / employment', 'Transit'] },
+        { name: 'duration', label: 'Intended Duration of Stay', type: 'text', required: false, placeholder: 'e.g. 10 days, 3 months, 1 year' },
+        { name: 'visa_type', label: 'Visa Type (if known)', type: 'text', required: false, placeholder: 'e.g. Tourist visa, e-visa, visa on arrival, B1/B2, Schengen' },
+        { name: 'special', label: 'Special Circumstances', type: 'text', required: false, placeholder: 'e.g. Minor travelling alone, multiple entry needed, previously refused' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
+
+    // ─── INSURANCE (additional) ───────────────────────────────────────────────
+    {
+      name: 'Premium Renewal Reminder',
+      slug: 'insurance-renewal-reminder',
+      icon: '🔔',
+      description: 'Write persuasive insurance renewal reminders that retain policyholders.',
+      industryId: bySlug('insurance'),
+      systemPrompt: 'You are an insurance retention specialist. You write personalised, compelling renewal reminders that communicate the value of continued coverage, create appropriate urgency, and make renewing easy. You know why policyholders lapse and address those objections proactively.',
+      userPromptTemplate: `Write an insurance renewal reminder:
+
+Communication type: {comm_type}
+Policyholder name: {policyholder}
+Policy type: {policy_type}
+Current premium: {premium}
+Renewal date: {renewal_date}
+No-claim bonus or benefits earned: {ncb_benefits}
+Special renewal offer: {offer}
+Insurer / agent name: {sender}
+
+Write a personalised, value-focused reminder (under 200 words) that: highlights what coverage means to this person, mentions benefits earned, communicates renewal deadline with urgency, and makes it easy to act. Include subject line if email.`,
+      fields: [
+        { name: 'comm_type', label: 'Communication Type', type: 'select', required: true, options: ['First reminder (60 days before)', 'Second reminder (30 days before)', 'Urgent reminder (7 days before)', 'Last day reminder', 'Lapse grace period alert', 'Post-lapse win-back message'] },
+        { name: 'policyholder', label: 'Policyholder Name', type: 'text', required: true, placeholder: 'e.g. Mr. Suresh Iyer' },
+        { name: 'policy_type', label: 'Policy Type', type: 'text', required: true, placeholder: 'e.g. Family Health Insurance, Car Insurance' },
+        { name: 'premium', label: 'Renewal Premium', type: 'text', required: true, placeholder: 'e.g. ₹12,450 / year' },
+        { name: 'renewal_date', label: 'Renewal Due Date', type: 'text', required: true, placeholder: 'e.g. 31 May 2025' },
+        { name: 'ncb_benefits', label: 'No-Claim Bonus / Benefits Earned', type: 'text', required: false, placeholder: 'e.g. 35% NCB, 2 claim-free years, free health check-up earned' },
+        { name: 'offer', label: 'Special Renewal Offer (optional)', type: 'text', required: false, placeholder: 'e.g. 5% loyalty discount, free add-on cover if renewed before 25 May' },
+        { name: 'sender', label: 'Insurer / Agent Name', type: 'text', required: false, placeholder: 'Company or agent name' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 4,
+    },
+    {
+      name: 'Insurance Comparison Report',
+      slug: 'insurance-comparison-report',
+      icon: '⚖️',
+      description: 'Generate side-by-side insurance plan comparison reports for informed client decisions.',
+      industryId: bySlug('insurance'),
+      systemPrompt: 'You are an independent insurance advisor. You produce clear, objective insurance comparison reports that help clients understand the real differences between plans — not just the premium — and make the choice that best fits their needs and budget.',
+      userPromptTemplate: `Generate an insurance comparison report for:
+
+Client profile: {client}
+Insurance category: {category}
+Plans to compare: {plans}
+Key features to compare: {features}
+Client priorities: {priorities}
+Budget range: {budget}
+
+Provide:
+1. **Comparison Summary Table** (key features side by side)
+2. **Detailed Feature Analysis** per parameter
+3. **Coverage Depth Comparison** (inclusions and sub-limits)
+4. **Exclusions Comparison** (what each plan misses)
+5. **Price vs. Value Analysis**
+6. **Claim Settlement Ratio** (insurer reputation)
+7. **Best For** (which plan suits which need)
+8. **Advisor Recommendation** with clear rationale`,
+      fields: [
+        { name: 'client', label: 'Client Profile', type: 'text', required: true, placeholder: 'e.g. 38-year-old, family of 4, non-smoker, medium risk appetite' },
+        { name: 'category', label: 'Insurance Category', type: 'select', required: true, options: ['Health insurance', 'Term life insurance', 'Motor insurance', 'Home insurance', 'Travel insurance', 'Business insurance'] },
+        { name: 'plans', label: 'Plans / Products to Compare', type: 'textarea', required: true, placeholder: 'Plan 1: name, insurer, premium, coverage\nPlan 2: ...\nPlan 3: ...' },
+        { name: 'features', label: 'Key Features to Compare', type: 'textarea', required: false, placeholder: 'e.g. Sum insured, room rent limit, pre-existing disease waiting period, network hospitals, NCB, IDV...' },
+        { name: 'priorities', label: 'Client Priorities', type: 'textarea', required: false, placeholder: 'What matters most to this client? e.g. Low premium, broad cover, cashless network, maternity cover' },
+        { name: 'budget', label: 'Budget Range', type: 'text', required: false, placeholder: 'e.g. ₹10,000–₹20,000/year' },
+      ],
+      planRequired: 'FREE',
+      outputFormat: 'markdown',
+      sortOrder: 5,
+    },
   ];
 };
 

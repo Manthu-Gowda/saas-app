@@ -52,6 +52,29 @@ export const ADMIN_UPDATE_PROVIDER = (id) => `admin/ai-providers/${id}`;
 export const ADMIN_DELETE_PROVIDER = (id) => `admin/ai-providers/${id}`;
 export const ADMIN_TEST_PROVIDER = (id) => `admin/ai-providers/${id}/test`;
 
-// ─── Admin — Subscriptions & Audit Logs ──────────────────────────────────────
+// ─── Admin — Subscriptions, Invoices & Audit Logs ────────────────────────────
 export const ADMIN_GET_SUBSCRIPTIONS = "admin/subscriptions";
+export const ADMIN_GET_INVOICES = "admin/invoices";
 export const ADMIN_GET_AUDIT_LOGS = "admin/audit-logs";
+
+// ─── Stripe / Billing ─────────────────────────────────────────────────────────
+export const STRIPE_CREATE_CHECKOUT = "stripe/create-checkout";
+export const STRIPE_CREATE_PORTAL = "stripe/create-portal";
+export const STRIPE_MY_INVOICES = "stripe/my-invoices";
+export const STRIPE_MY_SUBSCRIPTION = "stripe/my-subscription";
+
+// ─── RAG (Document Intelligence) ─────────────────────────────────────────────
+export const RAG_UPLOAD = "rag/upload";
+export const RAG_LIST_DOCS = "rag/documents";
+export const RAG_DELETE_DOC = (id) => `rag/documents/${id}`;
+export const RAG_QUERY = "rag/query";
+
+// ─── Agents ───────────────────────────────────────────────────────────────────
+export const AGENTS_LIST = "agents";
+export const AGENTS_GET = (id) => `agents/${id}`;
+export const AGENTS_RUN = "agents/run";
+export const AGENTS_HISTORY = "agents/history";
+export const ADMIN_AGENTS_LIST = "agents/admin/all";
+export const ADMIN_AGENTS_CREATE = "agents/admin/create";
+export const ADMIN_AGENTS_UPDATE = (id) => `agents/admin/${id}`;
+export const ADMIN_AGENTS_DELETE = (id) => `agents/admin/${id}`;

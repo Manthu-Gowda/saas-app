@@ -2,10 +2,18 @@ import { useState, useEffect } from "react";
 import SubHeader from "../../components/SubHeader/SubHeader";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import PlanBadge from "../../components/PlanBadge/PlanBadge";
+import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import { getSessionUser } from "../../services/auth";
 import axiosInstance from "../../services/axiosInstance";
-import { GET_DASHBOARD } from "../../utils/apiPath";
-import { CheckOutlined } from "@ant-design/icons";
+import {
+  GET_DASHBOARD,
+  STRIPE_CREATE_CHECKOUT,
+  STRIPE_CREATE_PORTAL,
+  STRIPE_MY_INVOICES,
+} from "../../utils/apiPath";
+import { errorToast, successToast } from "../../services/ToastHelper";
+import { CheckOutlined, DownloadOutlined, LinkOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import "./Billing.scss";
 
 const PLANS = [
@@ -46,21 +54,44 @@ const PLANS = [
 
 const PLAN_NAMES = { FREE: "Starter Free", STARTER: "Starter", PRO: "Professional", BUSINESS: "Business" };
 
+const STATUS_COLORS = { paid: "#10b981", open: "#f59e0b", void: "#94a3b8", uncollectible: "#ef4444", draft: "#94a3b8" };
+
 const Billing = () => {
   const sessionUser = getSessionUser();
   const [userData, setUserData] = useState(null);
+  const [invoices, setInvoices] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
-    const fetchDash = async () => {
+    const fetchData = async () => {
       try {
         const { data } = await axiosInstance.get(GET_DASHBOARD);
         setUserData(data);
       } catch {
         setUserData({ planTier: sessionUser?.planTier || "FREE", runsUsed: 0, runsTotal: 10 });
       }
+
+      try {
+        const { data: invData } = await axiosInstance.get(STRIPE_MY_INVOICES);
+        setInvoices(Array.isArray(invData) ? invData : []);
+      } catch {
+        setInvoices([]);
+      }
     };
-    fetchDash();
+
+    // Check for Stripe redirect params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      successToast(`Plan upgraded to ${PLAN_NAMES[params.get("plan")] || params.get("plan")}! Your new features are active.`);
+      window.history.replaceState({}, "", "/billing");
+    }
+    if (params.get("canceled") === "true") {
+      errorToast("Checkout cancelled. No changes were made.");
+      window.history.replaceState({}, "", "/billing");
+    }
+
+    fetchData();
   }, []);
 
   const currentTier = userData?.planTier || sessionUser?.planTier || "FREE";
@@ -68,13 +99,44 @@ const Billing = () => {
   const runsTotal = userData?.runsTotal ?? 10;
   const runsPercent = runsTotal === -1 ? 0 : Math.min((runsUsed / runsTotal) * 100, 100);
 
-  const handleUpgrade = (planId) => {
-    if (planId === currentTier) return;
+  const handleUpgrade = async (planId) => {
+    if (planId === currentTier || planId === "FREE") return;
     setLoadingId(planId);
-    setTimeout(() => {
+    try {
+      const { data } = await axiosInstance.post(STRIPE_CREATE_CHECKOUT, { planTier: planId });
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        errorToast(data.message || "Could not start checkout.");
+      }
+    } catch (err) {
+      errorToast(err?.response?.data?.message || "Checkout failed. Please try again.");
+    } finally {
       setLoadingId(null);
-      alert(`Stripe integration coming soon!\n\nSelected plan: ${planId}\n\nContact your admin to upgrade.`);
-    }, 800);
+    }
+  };
+
+  const handleManageBilling = async () => {
+    setPortalLoading(true);
+    try {
+      const { data } = await axiosInstance.post(STRIPE_CREATE_PORTAL);
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        errorToast(data.message || "Could not open billing portal.");
+      }
+    } catch (err) {
+      errorToast(err?.response?.data?.message || "Billing portal unavailable. Please try again.");
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
+  const formatAmount = (amount, currency) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: (currency || "usd").toUpperCase(),
+    }).format(amount / 100);
   };
 
   return (
@@ -85,6 +147,7 @@ const Billing = () => {
         showBack={false}
       />
 
+      {/* Current plan card */}
       <div className="current-plan-card">
         <div className="current-plan-card__info">
           <h3>Your Current Plan</h3>
@@ -99,15 +162,26 @@ const Billing = () => {
           </p>
           {runsTotal !== -1 && (
             <div style={{ marginTop: 10, background: "#f1f5f9", borderRadius: 99, height: 8, overflow: "hidden" }}>
-              <div style={{ width: `${runsPercent}%`, height: "100%", borderRadius: 99, background: runsPercent >= 90 ? "#ef4444" : "#6c47ff", transition: "width 0.4s" }} />
+              <div
+                style={{
+                  width: `${runsPercent}%`,
+                  height: "100%",
+                  borderRadius: 99,
+                  background: runsPercent >= 90 ? "#ef4444" : "#6c47ff",
+                  transition: "width 0.4s",
+                }}
+              />
             </div>
           )}
         </div>
         <div className="current-plan-card__action">
-          <ButtonComponent variant="outline">Manage Billing in Stripe</ButtonComponent>
+          <ButtonComponent variant="outline" loading={portalLoading} onClick={handleManageBilling}>
+            Manage Billing in Stripe
+          </ButtonComponent>
         </div>
       </div>
 
+      {/* Pricing plans */}
       <div className="pricing-section">
         <h3 className="pricing-title">Plans</h3>
         <p className="pricing-subtitle">Choose the plan that fits your business needs.</p>
@@ -115,10 +189,18 @@ const Billing = () => {
         <div className="pricing-grid">
           {PLANS.map((plan) => {
             const isCurrent = plan.id === currentTier;
+            const isDowngrade =
+              ["FREE", "STARTER", "PRO", "BUSINESS"].indexOf(plan.id) <
+              ["FREE", "STARTER", "PRO", "BUSINESS"].indexOf(currentTier);
+
             return (
-              <div key={plan.id} className={`pricing-card ${plan.isPopular ? "is-popular" : ""} ${isCurrent ? "is-current" : ""}`}>
+              <div
+                key={plan.id}
+                className={`pricing-card ${plan.isPopular ? "is-popular" : ""} ${isCurrent ? "is-current" : ""}`}
+              >
                 {plan.isPopular && !isCurrent && <div className="popular-badge">Most Popular</div>}
                 {isCurrent && <div className="popular-badge current-badge">Your Plan</div>}
+
                 <div className="pricing-card__header">
                   <PlanBadge tier={plan.tier} />
                   <div className="price-block">
@@ -141,18 +223,87 @@ const Billing = () => {
                   <ButtonComponent
                     variant={isCurrent ? "ghost" : plan.isPopular ? "primary" : "ghost"}
                     size="lg"
-                    disabled={isCurrent}
+                    disabled={isCurrent || isDowngrade}
                     loading={loadingId === plan.id}
                     onClick={() => handleUpgrade(plan.id)}
                     style={{ width: "100%" }}
                   >
-                    {isCurrent ? "Current Plan" : "Upgrade"}
+                    {isCurrent ? "Current Plan" : isDowngrade ? "Downgrade via Portal" : "Upgrade"}
                   </ButtonComponent>
                 </div>
               </div>
             );
           })}
         </div>
+      </div>
+
+      {/* Invoice history */}
+      <div className="invoices-section">
+        <h3 className="invoices-title">Billing History</h3>
+        {invoices.length === 0 ? (
+          <div className="invoices-empty">
+            No invoices yet. They will appear here after your first payment.
+          </div>
+        ) : (
+          <div className="invoices-table-wrap">
+            <table className="invoices-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoices.map((inv) => (
+                  <tr key={inv._id}>
+                    <td><strong>{inv.number || inv.stripeInvoiceId?.slice(0, 14) || "—"}</strong></td>
+                    <td style={{ color: "#64748b", fontSize: 13 }}>
+                      {inv.createdAt ? new Date(inv.createdAt).toLocaleDateString() : "—"}
+                    </td>
+                    <td><strong>{formatAmount(inv.amount, inv.currency)}</strong></td>
+                    <td>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          padding: "3px 10px",
+                          borderRadius: 99,
+                          fontSize: 12,
+                          fontWeight: 600,
+                          background: `${STATUS_COLORS[inv.status] || "#94a3b8"}18`,
+                          color: STATUS_COLORS[inv.status] || "#94a3b8",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {inv.status}
+                      </span>
+                    </td>
+                    <td>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        {inv.invoicePdf && (
+                          <Tooltip title="Download PDF">
+                            <a href={inv.invoicePdf} target="_blank" rel="noreferrer" style={{ color: "#6c47ff" }}>
+                              <DownloadOutlined />
+                            </a>
+                          </Tooltip>
+                        )}
+                        {inv.hostedInvoiceUrl && (
+                          <Tooltip title="View Invoice">
+                            <a href={inv.hostedInvoiceUrl} target="_blank" rel="noreferrer" style={{ color: "#64748b" }}>
+                              <LinkOutlined />
+                            </a>
+                          </Tooltip>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

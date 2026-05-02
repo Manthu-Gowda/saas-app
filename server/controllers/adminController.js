@@ -4,8 +4,10 @@ import Industry from '../models/Industry.js';
 import AiProvider from '../models/AiProvider.js';
 import AuditLog from '../models/AuditLog.js';
 import History from '../models/History.js';
+import Invoice from '../models/Invoice.js';
 import { encrypt, decrypt } from '../utils/encryption.js';
 import { callAiProvider } from '../utils/aiProviders.js';
+import { getCacheStats } from '../utils/cache.js';
 
 // ── Dashboard Stats ────────────────────────────────────────────────────────────
 
@@ -452,7 +454,41 @@ export const getAnalytics = async (req, res) => {
       { $group: { _id: '$provider', count: { $sum: 1 } } },
     ]);
 
-    res.json({ dailyRuns, toolUsage, industryUsage, planBreakdown, userGrowth, providerUsage });
+    // Cost analytics
+    const costByDay = await History.aggregate([
+      { $match: { createdAt: { $gte: thirtyDaysAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          costUsd: { $sum: '$costUsd' },
+          costInr: { $sum: '$costInr' },
+          runs: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    const totalCostStats = await History.aggregate([
+      { $group: { _id: null, totalUsd: { $sum: '$costUsd' }, totalInr: { $sum: '$costInr' }, totalRuns: { $sum: 1 }, cacheHits: { $sum: { $cond: ['$cacheHit', 1, 0] } } } },
+    ]);
+
+    const costByProvider = await History.aggregate([
+      { $group: { _id: '$provider', costUsd: { $sum: '$costUsd' }, costInr: { $sum: '$costInr' }, runs: { $sum: 1 } } },
+    ]);
+
+    const cacheStats = await getCacheStats();
+
+    const usdToInr = Number(process.env.USD_TO_INR) || 84;
+
+    res.json({
+      dailyRuns, toolUsage, industryUsage, planBreakdown, userGrowth, providerUsage,
+      costByDay, costByProvider,
+      totalCostUsd: totalCostStats[0]?.totalUsd || 0,
+      totalCostInr: totalCostStats[0]?.totalInr || 0,
+      totalCacheHits: totalCostStats[0]?.cacheHits || 0,
+      cacheStats,
+      usdToInr,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -476,6 +512,40 @@ export const getAuditLogs = async (req, res) => {
 };
 
 // ── Subscriptions Overview ─────────────────────────────────────────────────────
+
+// ── Admin Invoices ─────────────────────────────────────────────────────────────
+
+export const getAdminInvoices = async (req, res) => {
+  try {
+    const { page = 1, limit = 25, search = '' } = req.query;
+    const query = {};
+
+    if (search) {
+      const matchingUsers = await User.find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+        ],
+      }).select('_id');
+      const userIds = matchingUsers.map((u) => u._id);
+      query.$or = [
+        { number: { $regex: search, $options: 'i' } },
+        { userId: { $in: userIds } },
+      ];
+    }
+
+    const total = await Invoice.countDocuments(query);
+    const invoices = await Invoice.find(query)
+      .populate('userId', 'name email')
+      .sort({ createdAt: -1 })
+      .skip((Number(page) - 1) * Number(limit))
+      .limit(Number(limit));
+
+    res.json({ invoices, total, page: Number(page) });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export const getSubscriptionsOverview = async (req, res) => {
   try {
