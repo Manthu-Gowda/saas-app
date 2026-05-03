@@ -4,7 +4,7 @@ import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { errorToast, successToast } from "../../services/ToastHelper";
 import axiosInstance from "../../services/axiosInstance";
 import { RAG_UPLOAD, RAG_LIST_DOCS, RAG_DELETE_DOC, RAG_QUERY } from "../../utils/apiPath";
-import { UploadOutlined, DeleteOutlined, FileTextOutlined, SearchOutlined, SendOutlined } from "@ant-design/icons";
+import { UploadOutlined, DeleteOutlined, FileTextOutlined, SearchOutlined, SendOutlined, ThunderboltOutlined, FontSizeOutlined } from "@ant-design/icons";
 import { Tooltip, Spin } from "antd";
 import "./Documents.scss";
 
@@ -117,11 +117,21 @@ const Documents = () => {
               <div className="rag-answer-card__response">{answer.answer}</div>
               {answer.sources?.length > 0 && (
                 <div className="rag-answer-card__sources">
-                  <p className="sources-title">Sources used:</p>
+                  <p className="sources-title">
+                    Sources used
+                    <span className={`search-mode-badge ${answer.searchMode}`}>
+                      {answer.searchMode === "semantic"
+                        ? <><ThunderboltOutlined /> Semantic</>
+                        : <><FontSizeOutlined /> Keyword</>}
+                    </span>
+                  </p>
                   {answer.sources.map((s, i) => (
                     <div key={i} className="source-item">
                       <FileTextOutlined style={{ color: "#6c47ff", marginRight: 6 }} />
                       <strong>{s.documentName}</strong>
+                      {s.similarityScore !== undefined && (
+                        <span className="source-item__score">{Math.round(s.similarityScore * 100)}% match</span>
+                      )}
                       <span> — "{s.excerpt}"</span>
                     </div>
                   ))}

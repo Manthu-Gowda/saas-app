@@ -70,6 +70,9 @@
       margin-top: 4px;
 
       .sources-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         font-size: $font_xs;
         font-weight: 600;
         text-transform: uppercase;
@@ -78,11 +81,37 @@
         margin: 0 0 10px 0;
       }
 
+      .search-mode-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+
+        &.semantic { background: rgba(108,71,255,0.1); color: $brand_color; }
+        &.keyword  { background: rgba(15,180,120,0.1); color: #0fb478; }
+      }
+
       .source-item {
         font-size: $font_s;
         color: $secondary_text;
         margin-bottom: 6px;
         strong { color: $primary_text; }
+
+        &__score {
+          display: inline-block;
+          margin: 0 6px;
+          padding: 1px 6px;
+          background: rgba(108,71,255,0.08);
+          color: $brand_color;
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: 600;
+        }
       }
     }
 

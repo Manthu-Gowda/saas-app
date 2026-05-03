@@ -8,10 +8,11 @@ import {
   CreditCardOutlined,
   SettingOutlined,
   CloseOutlined,
-  CaretDownOutlined,
   MenuOutlined,
   LogoutOutlined,
   BellOutlined,
+  FileTextOutlined,
+  RobotOutlined,
 } from "@ant-design/icons";
 import CustomModal from "../CustomModal/CustomModal";
 import { getSessionUser, clearSession } from "../../services/auth";
@@ -22,6 +23,8 @@ const { useBreakpoint } = Grid;
 const MENUS = [
   { key: "dashboard", text: "Dashboard", icon: <DashboardOutlined />, path: "/dashboard" },
   { key: "tools", text: "AI Tools", icon: <AppstoreOutlined />, path: "/tools" },
+  { key: "agents", text: "AI Agents", icon: <RobotOutlined />, path: "/agents" },
+  { key: "documents", text: "Documents", icon: <FileTextOutlined />, path: "/documents" },
   { key: "history", text: "History", icon: <HistoryOutlined />, path: "/history" },
   { key: "billing", text: "Billing", icon: <CreditCardOutlined />, path: "/billing" },
   { key: "settings", text: "Settings", icon: <SettingOutlined />, path: "/settings" },

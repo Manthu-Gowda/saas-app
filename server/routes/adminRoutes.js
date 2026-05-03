@@ -30,9 +30,6 @@ router.post('/users/:userId/reset-runs', resetUserRuns);
 router.post('/users/:userId/change-plan', changePlan);
 router.delete('/users/:userId', deleteUser);
 
-// Tools (legacy)
-router.get('/GetAllUsers', getAllUsers);
-
 // Tools
 router.get('/tools', getAllToolsAdmin);
 router.get('/tools/:toolId', getToolByIdAdmin);

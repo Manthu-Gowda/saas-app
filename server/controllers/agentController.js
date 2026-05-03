@@ -38,9 +38,12 @@ export const runAgent = async (req, res) => {
     const { agentId, inputs } = req.body;
 
     const user = await User.findById(req.user._id);
-    const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
-    if (user.runsUsed >= totalAvailable) {
-      return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+    // runsTotal === -1 means unlimited (BUSINESS plan)
+    if (user.runsTotal !== -1) {
+      const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
+      if (user.runsUsed >= totalAvailable) {
+        return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+      }
     }
 
     const agent = await Agent.findById(agentId);

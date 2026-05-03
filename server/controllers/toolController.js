@@ -36,9 +36,12 @@ export const runTool = async (req, res) => {
     const { toolSlug, promptData } = req.body;
     const user = await User.findById(req.user._id);
 
-    const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
-    if (user.runsUsed >= totalAvailable) {
-      return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+    // runsTotal === -1 means unlimited (BUSINESS plan)
+    if (user.runsTotal !== -1) {
+      const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
+      if (user.runsUsed >= totalAvailable) {
+        return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+      }
     }
 
     const tool = await Tool.findOne({ slug: toolSlug, status: 'active' }).populate('aiProviderId');
@@ -104,7 +107,7 @@ export const runTool = async (req, res) => {
 
         if (!userPrompt.trim() || userPrompt === tool.userPromptTemplate) {
           let fallback = `${tool.name} request:\n\n`;
-          tool.fields.forEach((f) => {
+          (tool.fields || []).forEach((f) => {
             if (f.type !== 'file' && promptData?.[f.name]) {
               fallback += `${f.label}: ${promptData[f.name]}\n`;
             }
@@ -142,7 +145,7 @@ export const runTool = async (req, res) => {
       }
     } else {
       responseText = `**Demo Response for ${tool.name}**\n\nNo AI provider is configured yet. Please ask your administrator to add an AI provider in the Admin Portal → AI Providers.\n\n---\n\n**Your submitted data:**\n${
-        tool.fields
+        (tool.fields || [])
           .filter((f) => f.type !== 'file')
           .map((f) => `- **${f.label}:** ${promptData?.[f.name] || '_empty_'}`)
           .join('\n')
