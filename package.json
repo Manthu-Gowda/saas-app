@@ -6,6 +6,7 @@
   "scripts": {
     "frontend": "vite",
     "backend": "node server/index.js",
+    "seed": "node server/seed.js",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "build": "vite build",
     "lint": "eslint .",
@@ -23,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.0",
     "multer": "^2.1.1",
+    "nodemailer": "^8.0.7",
     "pdf-parse": "^2.4.5",
     "prop-types": "^15.8.1",
     "react": "^19.2.5",
@@ -30,7 +32,9 @@
     "react-router-dom": "^7.14.2",
     "react-toastify": "^11.1.0",
     "recharts": "^3.8.1",
-    "sass": "^1.99.0"
+    "sass": "^1.99.0",
+    "stripe": "^22.1.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

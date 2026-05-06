@@ -1,0 +1,179 @@
+@use "../../globalStyles" as *;
+
+.agents-page {
+  .agents-loading, .agents-empty {
+    @include card;
+    padding: 48px;
+    text-align: center;
+    color: $secondary_text;
+    font-size: $font_s;
+  }
+
+  .agents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .agent-card {
+    @include card;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    &:hover { border-color: $brand_color; box-shadow: 0 4px 16px rgba(108,71,255,0.1); }
+
+    &__icon { font-size: 32px; flex-shrink: 0; }
+
+    &__body { flex: 1; min-width: 0; }
+
+    &__name { font-size: $font_m; font-weight: 700; color: $primary_text; }
+
+    &__desc { font-size: $font_s; color: $secondary_text; margin: 2px 0 6px; }
+
+    &__meta { font-size: $font_xs; color: $secondary_text; }
+
+    &__run {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: $font_s;
+      font-weight: 600;
+      color: $brand_color;
+      padding: 8px 16px;
+      border: 1.5px solid $brand_color;
+      border-radius: 8px;
+      transition: all 0.2s;
+      .agent-card:hover & { background: $brand_color; color: #fff; }
+    }
+  }
+}
+
+// Modal styles
+.agent-modal {
+  padding: 4px 0;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  &__icon { font-size: 36px; }
+
+  &__title { font-size: $font_xl; font-weight: 700; color: $primary_text; }
+
+  &__desc { font-size: $font_s; color: $secondary_text; margin-top: 2px; }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: $font_s;
+    color: $secondary_text;
+
+    &.is-active { color: $brand_color; font-weight: 600; }
+    &.is-done { color: #10b981; }
+
+    &__num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    &__label { flex: 1; }
+
+    &__var code { font-size: 11px; color: $brand_color; background: rgba(108,71,255,0.08); padding: 1px 6px; border-radius: 4px; }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .agent-form-field {
+    label { display: block; font-size: $font_s; font-weight: 600; color: $primary_text; margin-bottom: 6px; }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid $primary_border;
+      border-radius: 8px;
+      font-size: $font_s;
+      color: $primary_text;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      resize: vertical;
+      &:focus { border-color: $brand_color; }
+    }
+  }
+
+  &__results {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    .results-meta {
+      font-size: $font_xs;
+      color: $secondary_text;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-radius: 8px;
+      strong { color: $primary_text; }
+    }
+  }
+
+  .result-block {
+    border: 1px solid $primary_border;
+    border-radius: 10px;
+    overflow: hidden;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      font-size: $font_s;
+      font-weight: 600;
+      color: $primary_text;
+    }
+
+    &__cost { margin-left: auto; font-size: $font_xs; color: $secondary_text; font-weight: 400; }
+
+    &__content {
+      padding: 14px;
+      font-size: 13px;
+      color: $primary_text;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+  }
+}

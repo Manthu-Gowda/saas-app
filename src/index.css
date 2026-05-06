@@ -19,7 +19,7 @@ body,
   -webkit-font-smoothing: antialiased;
 }
 
-// ─── Ant Design overrides ──────────────────────────────────
+/* Ant Design overrides */
 .ant-btn-primary {
   background: $brand_color !important;
   border-color: $brand_color !important;

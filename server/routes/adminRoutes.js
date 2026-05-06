@@ -5,7 +5,7 @@ import {
   resetUserRuns, changePlan, deleteUser,
   getAllIndustries, createIndustry, updateIndustry, deleteIndustry,
   getAllProviders, createProvider, updateProvider, deleteProvider, testProvider,
-  getAnalytics, getAuditLogs, getSubscriptionsOverview,
+  getAnalytics, getAuditLogs, getSubscriptionsOverview, getAdminInvoices,
 } from '../controllers/adminController.js';
 import {
   getAllToolsAdmin, getToolByIdAdmin, createTool, updateTool, deleteTool,
@@ -29,9 +29,6 @@ router.post('/users/:userId/activate', activateUser);
 router.post('/users/:userId/reset-runs', resetUserRuns);
 router.post('/users/:userId/change-plan', changePlan);
 router.delete('/users/:userId', deleteUser);
-
-// Tools (legacy)
-router.get('/GetAllUsers', getAllUsers);
 
 // Tools
 router.get('/tools', getAllToolsAdmin);
@@ -61,5 +58,8 @@ router.get('/audit-logs', getAuditLogs);
 
 // Subscriptions
 router.get('/subscriptions', getSubscriptionsOverview);
+
+// Invoices
+router.get('/invoices', getAdminInvoices);
 
 export default router;

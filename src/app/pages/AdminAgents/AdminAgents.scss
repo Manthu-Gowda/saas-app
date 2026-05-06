@@ -1,0 +1,179 @@
+@use "../../globalStyles" as *;
+
+.admin-agents-page {
+  .agents-loading, .agents-empty {
+    @include card;
+    padding: 48px;
+    text-align: center;
+    color: $secondary_text;
+    font-size: $font_s;
+  }
+
+  .agents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .agent-row {
+    @include card;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    transition: border-color 0.2s;
+    &:hover { border-color: $brand_color; }
+
+    &__icon { font-size: 28px; flex-shrink: 0; }
+
+    &__info { flex: 1; min-width: 0; }
+
+    &__name { font-size: $font_m; font-weight: 700; color: $primary_text; }
+
+    &__meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: $font_xs;
+      color: $secondary_text;
+      margin: 4px 0;
+    }
+
+    &__desc { font-size: $font_s; color: $secondary_text; }
+
+    &__actions { display: flex; gap: 8px; flex-shrink: 0; }
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid $primary_border;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+
+    &.edit:hover { border-color: $brand_color; color: $brand_color; background: rgba(108,71,255,0.06); }
+    &.delete:hover { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+  }
+}
+
+// ── Modal form styles ──────────────────────────────────────────────────────────
+.agent-modal-body {
+  padding-top: 8px;
+
+  .agent-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid $primary_border;
+  }
+}
+
+.agent-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 0 8px;
+}
+
+.agent-form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.agent-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  label {
+    font-size: $font_xs;
+    font-weight: 600;
+    color: $primary_text;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  input, textarea, select {
+    padding: 9px 12px;
+    border: 1.5px solid $primary_border;
+    border-radius: 8px;
+    font-size: $font_s;
+    color: $primary_text;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    width: 100%;
+    resize: vertical;
+    &:focus { border-color: $brand_color; }
+  }
+}
+
+.agent-subcard {
+  border: 1.5px solid $primary_border;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font_s;
+    font-weight: 700;
+    color: $brand_color;
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: rgba(108,71,255,0.1);
+      border-radius: 50%;
+      font-size: 12px;
+    }
+  }
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  &:hover { background: #fef2f2; }
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px dashed $primary_border;
+  border-radius: 10px;
+  background: #fafafa;
+  color: $brand_color;
+  font-size: $font_s;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover { border-color: $brand_color; background: rgba(108,71,255,0.04); }
+}

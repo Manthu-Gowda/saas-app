@@ -65,12 +65,12 @@ const Login = () => {
           AI-Powered Tools for Every Industry
         </h1>
         <p className="auth-page__sub">
-          Legal, HR, E-commerce, Real Estate, Finance, Marketing — all in one platform.
+          Legal, HR, accounting, automotive, healthcare, education, insurance, logistics, and more in one platform.
         </p>
         <div className="auth-page__stats">
           {[
-            { label: "AI Tools", value: "18+" },
-            { label: "Industries", value: "6" },
+            { label: "AI Tools", value: "62" },
+            { label: "Industries", value: "20" },
             { label: "Users", value: "10K+" },
           ].map((s) => (
             <div key={s.label} className="auth-page__stat">

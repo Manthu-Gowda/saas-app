@@ -13,6 +13,10 @@ const aiProviderSchema = new mongoose.Schema(
       maxTokens: { type: Number, default: 2000 },
       temperature: { type: Number, default: 0.7 },
     },
+    pricing: {
+      inputPer1M: { type: Number, default: 0 },
+      outputPer1M: { type: Number, default: 0 },
+    },
   },
   { timestamps: true }
 );

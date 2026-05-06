@@ -28,7 +28,7 @@ const LandingPage = () => {
               Tailored for <span className="highlight">Your Industry</span>
             </h1>
             <p className="hero-subtitle">
-              Zynapse brings enterprise-grade AI to Legal, HR, Real Estate, E-commerce, Finance, and Marketing professionals. Work smarter, not harder.
+              Zynapse brings enterprise-grade AI to 20 industries including accounting, automotive, cybersecurity, healthcare, retail, logistics, agriculture, IT, government, weddings, travel, education, and insurance.
             </p>
             <div className="hero-actions">
               <Link to="/signup">
@@ -80,7 +80,7 @@ const LandingPage = () => {
             <div className="feature-card">
               <div className="feature-icon" style={{ background: "#dbeafe", color: "#3b82f6" }}><TeamOutlined /></div>
               <h3>Industry Specific</h3>
-              <p>Don't settle for generic AI. Our prompts and workflows are meticulously engineered for 6 distinct professional industries.</p>
+              <p>Don't settle for generic AI. Our prompts and workflows are engineered for 20 professional industries with dedicated tools for each workflow.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon" style={{ background: "#d1fae5", color: "#10b981" }}><RiseOutlined /></div>

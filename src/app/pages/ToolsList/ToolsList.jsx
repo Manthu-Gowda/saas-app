@@ -5,7 +5,7 @@ import InputField from "../../components/InputField/InputField";
 import { SearchOutlined, ArrowRightOutlined, LockOutlined } from "@ant-design/icons";
 import { getSessionUser } from "../../services/auth";
 import axiosInstance from "../../services/axiosInstance";
-import { GET_MY_TOOLS } from "../../utils/apiPath";
+import { GET_DASHBOARD, GET_MY_TOOLS } from "../../utils/apiPath";
 import { errorToast } from "../../services/ToastHelper";
 import "./ToolsList.scss";
 
@@ -15,6 +15,7 @@ const ToolsList = () => {
   const navigate = useNavigate();
   const user = getSessionUser();
   const [tools, setTools] = useState([]);
+  const [industry, setIndustry] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,8 +23,12 @@ const ToolsList = () => {
     const fetchTools = async () => {
       setLoading(true);
       try {
-        const { data } = await axiosInstance.get(GET_MY_TOOLS);
-        setTools(data);
+        const [toolsRes, dashboardRes] = await Promise.all([
+          axiosInstance.get(GET_MY_TOOLS),
+          axiosInstance.get(GET_DASHBOARD),
+        ]);
+        setTools(toolsRes.data);
+        setIndustry(dashboardRes.data?.industry || toolsRes.data?.[0]?.industryId || null);
       } catch {
         errorToast("Failed to fetch tools.");
       } finally {
@@ -36,7 +41,7 @@ const ToolsList = () => {
   const userPlanOrder = PLAN_ORDER[user?.planTier || "FREE"] ?? 0;
 
   const filteredTools = tools.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase()) ||
+    t.name?.toLowerCase().includes(search.toLowerCase()) ||
     t.description?.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -50,7 +55,7 @@ const ToolsList = () => {
     <div className="tools-list-page">
       <SubHeader
         title="AI Tools Library"
-        subTitle="Select a tool below to start generating content."
+        subTitle={industry ? `${tools.length} tools related to ${industry.name}.` : "Select a tool below to start generating content."}
         showBack={false}
       >
         <div style={{ width: "300px" }}>
@@ -63,6 +68,17 @@ const ToolsList = () => {
           />
         </div>
       </SubHeader>
+
+      {industry && (
+        <div className="industry-context">
+          <div className="industry-context__icon">{industry.icon}</div>
+          <div>
+            <div className="industry-context__label">Selected Industry</div>
+            <div className="industry-context__name">{industry.name}</div>
+          </div>
+          <div className="industry-context__count">{tools.length} related AI tools</div>
+        </div>
+      )}
 
       {loading ? (
         <div style={{ textAlign: "center", padding: "48px", color: "#94a3b8" }}>Loading tools...</div>

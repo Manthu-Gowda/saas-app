@@ -4,13 +4,15 @@ import User from '../models/User.js';
 import AiProvider from '../models/AiProvider.js';
 import { decrypt } from '../utils/encryption.js';
 import { callAiProvider } from '../utils/aiProviders.js';
+import { calculateCost } from '../utils/costCalculator.js';
+import { getCacheKey, getFromCache, saveToCache } from '../utils/cache.js';
 
 export const getToolsByIndustry = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user.industryId) return res.json([]);
-
     const tools = await Tool.find({ industryId: user.industryId, status: 'active' })
+      .populate('industryId', 'name slug icon')
       .sort({ sortOrder: 1 })
       .select('-systemPrompt -userPromptTemplate');
     res.json(tools);
@@ -34,15 +36,52 @@ export const runTool = async (req, res) => {
     const { toolSlug, promptData } = req.body;
     const user = await User.findById(req.user._id);
 
-    const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
-    if (user.runsUsed >= totalAvailable) {
-      return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+    // runsTotal === -1 means unlimited (BUSINESS plan)
+    if (user.runsTotal !== -1) {
+      const totalAvailable = user.runsTotal + (user.bonusRuns || 0);
+      if (user.runsUsed >= totalAvailable) {
+        return res.status(403).json({ message: 'AI run limit exceeded. Please upgrade your plan.' });
+      }
     }
 
     const tool = await Tool.findOne({ slug: toolSlug, status: 'active' }).populate('aiProviderId');
     if (!tool) return res.status(404).json({ message: 'Tool not found' });
 
-    // Get the AI provider: tool-specific or platform default
+    // ── Cache check ──────────────────────────────────────────────────────────
+    const cacheEnabled = process.env.CACHE_ENABLED !== 'false';
+    const cacheKey = getCacheKey(toolSlug, promptData);
+
+    if (cacheEnabled) {
+      const cached = await getFromCache(cacheKey);
+      if (cached) {
+        await History.create({
+          userId: user._id,
+          toolId: tool._id,
+          prompt: JSON.stringify(promptData),
+          response: cached.response,
+          provider: 'cache',
+          tokensUsed: 0,
+          costUsd: 0,
+          costInr: 0,
+          cacheHit: true,
+          latencyMs: 0,
+          status: 'completed',
+        });
+        user.runsUsed += 1;
+        await user.save();
+        return res.json({
+          response: cached.response,
+          runsUsed: user.runsUsed,
+          runsTotal: totalAvailable,
+          tokensUsed: 0,
+          costUsd: 0,
+          costInr: 0,
+          cacheHit: true,
+        });
+      }
+    }
+
+    // ── Provider resolution ──────────────────────────────────────────────────
     let provider = tool.aiProviderId;
     if (!provider) {
       provider = await AiProvider.findOne({ isDefault: true, isActive: true });
@@ -51,13 +90,14 @@ export const runTool = async (req, res) => {
     let responseText = '';
     let inputTokens = 0;
     let outputTokens = 0;
+    let costUsd = 0;
+    let costInr = 0;
     const startTime = Date.now();
 
     if (provider && provider.apiKeyEnc) {
       try {
         const apiKey = decrypt(provider.apiKeyEnc);
 
-        // Build user prompt from template + inputs
         let userPrompt = tool.userPromptTemplate || '';
         if (promptData && typeof promptData === 'object') {
           Object.entries(promptData).forEach(([key, value]) => {
@@ -65,10 +105,9 @@ export const runTool = async (req, res) => {
           });
         }
 
-        // If no template, fall back to a structured prompt
         if (!userPrompt.trim() || userPrompt === tool.userPromptTemplate) {
           let fallback = `${tool.name} request:\n\n`;
-          tool.fields.forEach((f) => {
+          (tool.fields || []).forEach((f) => {
             if (f.type !== 'file' && promptData?.[f.name]) {
               fallback += `${f.label}: ${promptData[f.name]}\n`;
             }
@@ -86,14 +125,27 @@ export const runTool = async (req, res) => {
         responseText = result.text;
         inputTokens = result.inputTokens;
         outputTokens = result.outputTokens;
+
+        // ── Cost calculation ───────────────────────────────────────────────
+        const cost = calculateCost({
+          providerSlug: provider.slug,
+          inputTokens,
+          outputTokens,
+          customPricing: provider.pricing?.inputPer1M ? provider.pricing : null,
+        });
+        costUsd = cost.costUsd;
+        costInr = cost.costInr;
+
+        // ── Save to cache ──────────────────────────────────────────────────
+        if (cacheEnabled) {
+          await saveToCache({ cacheKey, toolId: tool._id, response: responseText, tokensUsed: inputTokens + outputTokens, costUsd });
+        }
       } catch (aiError) {
-        // AI call failed — return error, don't deduct run
         return res.status(500).json({ message: `AI Provider error: ${aiError.message}` });
       }
     } else {
-      // No provider configured — return a helpful demo response
-      responseText = `**Demo Response for ${tool.name}**\n\nNo AI provider is configured yet. Please have your administrator add an AI provider (OpenAI, Anthropic, etc.) in the Admin Portal under **AI Providers**.\n\n---\n\n**Your submitted data:**\n${
-        tool.fields
+      responseText = `**Demo Response for ${tool.name}**\n\nNo AI provider is configured yet. Please ask your administrator to add an AI provider in the Admin Portal → AI Providers.\n\n---\n\n**Your submitted data:**\n${
+        (tool.fields || [])
           .filter((f) => f.type !== 'file')
           .map((f) => `- **${f.label}:** ${promptData?.[f.name] || '_empty_'}`)
           .join('\n')
@@ -109,6 +161,9 @@ export const runTool = async (req, res) => {
       response: responseText,
       provider: provider?.name || 'Demo',
       tokensUsed: inputTokens + outputTokens,
+      costUsd,
+      costInr,
+      cacheHit: false,
       latencyMs,
       status: 'completed',
     });
@@ -121,6 +176,9 @@ export const runTool = async (req, res) => {
       runsUsed: user.runsUsed,
       runsTotal: totalAvailable,
       tokensUsed: inputTokens + outputTokens,
+      costUsd,
+      costInr,
+      cacheHit: false,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

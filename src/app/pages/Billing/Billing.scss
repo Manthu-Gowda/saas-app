@@ -165,4 +165,61 @@
       }
     }
   }
+
+  .invoices-section {
+    margin-top: 48px;
+
+    .invoices-title {
+      font-size: $font_xl;
+      font-weight: 700;
+      color: $primary_text;
+      margin: 0 0 20px 0;
+    }
+
+    .invoices-empty {
+      @include card;
+      padding: 32px 24px;
+      text-align: center;
+      color: $secondary_text;
+      font-size: $font_s;
+    }
+
+    .invoices-table-wrap {
+      @include card;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .invoices-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        background: #f8fafc;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: $font_xs;
+        font-weight: 600;
+        color: $secondary_text;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid $primary_border;
+      }
+
+      td {
+        padding: 14px 16px;
+        font-size: $font_s;
+        color: $primary_text;
+        border-bottom: 1px solid $primary_border;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      tr:hover td {
+        background: #fafafa;
+      }
+    }
+  }
 }

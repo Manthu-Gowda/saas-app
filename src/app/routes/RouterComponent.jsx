@@ -19,8 +19,11 @@ import ToolRunner from "../pages/ToolRunner/ToolRunner";
 import History from "../pages/History/History";
 import Billing from "../pages/Billing/Billing";
 import CustomerSettings from "../pages/CustomerSettings/CustomerSettings";
+import Documents from "../pages/Documents/Documents";
+import Agents from "../pages/Agents/Agents";
 
 // Admin Pages
+import AdminAgents from "../pages/AdminAgents/AdminAgents";
 import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import AdminUsers from "../pages/AdminUsers/AdminUsers";
 import AdminUserDetail from "../pages/AdminUserDetail/AdminUserDetail";
@@ -60,6 +63,8 @@ const RouterComponent = () => (
         <Route path="/history" element={<History />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/settings" element={<CustomerSettings />} />
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/agents" element={<Agents />} />
       </Route>
 
       {/* ─── Admin Routes ─────────────────────────────────── */}
@@ -82,6 +87,7 @@ const RouterComponent = () => (
         <Route path="/admin/analytics" element={<AdminAnalytics />} />
         <Route path="/admin/audit-logs" element={<AdminAuditLogs />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/agents" element={<AdminAgents />} />
       </Route>
 
       {/* ─── Fallback ─────────────────────────────────────── */}

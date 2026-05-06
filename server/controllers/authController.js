@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { sendWelcomeEmail } from '../utils/email.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'super_secret_zynapse_key_123', {
@@ -28,6 +29,7 @@ export const registerUser = async (req, res) => {
     });
 
     if (user) {
+      sendWelcomeEmail({ name: user.name, email: user.email }).catch(() => {});
       res.status(201).json({
         accessToken: generateToken(user._id),
         user: {
