@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SubHeader from "../../components/SubHeader/SubHeader";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import PlanBadge from "../../components/PlanBadge/PlanBadge";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
+import CustomTable from "../../components/CustomTable/CustomTable";
 import { getSessionUser } from "../../services/auth";
 import axiosInstance from "../../services/axiosInstance";
 import {
@@ -62,6 +63,25 @@ const Billing = () => {
   const [invoices, setInvoices] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [total, setTotal] = useState(0);
+  const [invoicesLoading, setInvoicesLoading] = useState(false);
+
+  const fetchInvoices = useCallback(async (pg = pageIndex, size = pageSize) => {
+    setInvoicesLoading(true);
+    try {
+      const { data: invData } = await axiosInstance.get(STRIPE_MY_INVOICES, {
+        params: { pageIndex: pg, pageSize: size }
+      });
+      setInvoices(invData.data || invData || []);
+      setTotal(invData.totalRecords || (Array.isArray(invData) ? invData.length : 0));
+    } catch {
+      setInvoices([]);
+    } finally {
+      setInvoicesLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,13 +90,6 @@ const Billing = () => {
         setUserData(data);
       } catch {
         setUserData({ planTier: sessionUser?.planTier || "FREE", runsUsed: 0, runsTotal: 10 });
-      }
-
-      try {
-        const { data: invData } = await axiosInstance.get(STRIPE_MY_INVOICES);
-        setInvoices(Array.isArray(invData) ? invData : []);
-      } catch {
-        setInvoices([]);
       }
     };
 
@@ -93,6 +106,10 @@ const Billing = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchInvoices(pageIndex, pageSize);
+  }, [fetchInvoices, pageIndex, pageSize]);
 
   const currentTier = userData?.planTier || sessionUser?.planTier || "FREE";
   const runsUsed = userData?.runsUsed ?? 0;
@@ -246,62 +263,76 @@ const Billing = () => {
           </div>
         ) : (
           <div className="invoices-table-wrap">
-            <table className="invoices-table">
-              <thead>
-                <tr>
-                  <th>Invoice #</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoices.map((inv) => (
-                  <tr key={inv._id}>
-                    <td><strong>{inv.number || inv.stripeInvoiceId?.slice(0, 14) || "—"}</strong></td>
-                    <td style={{ color: "#64748b", fontSize: 13 }}>
-                      {inv.createdAt ? new Date(inv.createdAt).toLocaleDateString() : "—"}
-                    </td>
-                    <td><strong>{formatAmount(inv.amount, inv.currency)}</strong></td>
-                    <td>
-                      <span
-                        style={{
-                          display: "inline-block",
-                          padding: "3px 10px",
-                          borderRadius: 99,
-                          fontSize: 12,
-                          fontWeight: 600,
-                          background: `${STATUS_COLORS[inv.status] || "#94a3b8"}18`,
-                          color: STATUS_COLORS[inv.status] || "#94a3b8",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        {inv.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div style={{ display: "flex", gap: 8 }}>
-                        {inv.invoicePdf && (
-                          <Tooltip title="Download PDF">
-                            <a href={inv.invoicePdf} target="_blank" rel="noreferrer" style={{ color: "#6c47ff" }}>
-                              <DownloadOutlined />
-                            </a>
-                          </Tooltip>
-                        )}
-                        {inv.hostedInvoiceUrl && (
-                          <Tooltip title="View Invoice">
-                            <a href={inv.hostedInvoiceUrl} target="_blank" rel="noreferrer" style={{ color: "#64748b" }}>
-                              <LinkOutlined />
-                            </a>
-                          </Tooltip>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <CustomTable
+              rowKey="_id"
+              columns={[
+                {
+                  title: "Invoice #",
+                  key: "number",
+                  render: (_, inv) => <strong>{inv.number || inv.stripeInvoiceId?.slice(0, 14) || "—"}</strong>
+                },
+                {
+                  title: "Date",
+                  key: "date",
+                  render: (_, inv) => <span style={{ color: "#64748b", fontSize: 13 }}>
+                    {inv.createdAt ? new Date(inv.createdAt).toLocaleDateString() : "—"}
+                  </span>
+                },
+                {
+                  title: "Amount",
+                  key: "amount",
+                  render: (_, inv) => <strong>{formatAmount(inv.amount, inv.currency)}</strong>
+                },
+                {
+                  title: "Status",
+                  key: "status",
+                  render: (_, inv) => (
+                    <span
+                      style={{
+                        display: "inline-block",
+                        padding: "3px 10px",
+                        borderRadius: 99,
+                        fontSize: 12,
+                        fontWeight: 600,
+                        background: `${STATUS_COLORS[inv.status] || "#94a3b8"}18`,
+                        color: STATUS_COLORS[inv.status] || "#94a3b8",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {inv.status}
+                    </span>
+                  )
+                },
+                {
+                  title: "Actions",
+                  key: "actions",
+                  render: (_, inv) => (
+                    <div style={{ display: "flex", gap: 8 }}>
+                      {inv.invoicePdf && (
+                        <Tooltip title="Download PDF">
+                          <a href={inv.invoicePdf} target="_blank" rel="noreferrer" style={{ color: "#6c47ff" }}>
+                            <DownloadOutlined />
+                          </a>
+                        </Tooltip>
+                      )}
+                      {inv.hostedInvoiceUrl && (
+                        <Tooltip title="View Invoice">
+                          <a href={inv.hostedInvoiceUrl} target="_blank" rel="noreferrer" style={{ color: "#64748b" }}>
+                            <LinkOutlined />
+                          </a>
+                        </Tooltip>
+                      )}
+                    </div>
+                  )
+                }
+              ]}
+              dataSource={invoices}
+              loading={invoicesLoading}
+              total={total}
+              pageSize={pageSize}
+              pageIndex={pageIndex - 1}
+              onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
+            />
           </div>
         )}
       </div>

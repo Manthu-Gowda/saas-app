@@ -37,25 +37,26 @@ const AdminUsers = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [planFilter, setPlanFilter] = useState("");
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page, limit: 25 });
+      const params = new URLSearchParams({ pageIndex, pageSize });
       if (search) params.append("search", search);
       if (statusFilter) params.append("status", statusFilter);
       if (planFilter) params.append("plan", planFilter);
 
       const { data: res } = await axiosInstance.get(`${ADMIN_GET_USERS}?${params}`);
-      setData(res.users || []);
-      setTotal(res.total || 0);
+      setData(res.data || []);
+      setTotal(res.totalRecords || 0);
     } catch {
       errorToast("Failed to load users");
     } finally {
       setLoading(false);
     }
-  }, [search, statusFilter, planFilter, page]);
+  }, [search, statusFilter, planFilter, pageIndex, pageSize]);
 
   useEffect(() => {
     const timer = setTimeout(fetchUsers, 300);
@@ -143,7 +144,7 @@ const AdminUsers = () => {
           <InputField
             name="search"
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            onChange={(e) => { setSearch(e.target.value); setPageIndex(1); }}
             placeholder="Search by name or email..."
             prefix={<SearchOutlined />}
           />
@@ -152,7 +153,7 @@ const AdminUsers = () => {
           <SelectInput
             name="status"
             value={statusFilter || undefined}
-            onChange={(v) => { setStatusFilter(v || ""); setPage(1); }}
+            onChange={(v) => { setStatusFilter(v || ""); setPageIndex(1); }}
             placeholder="Filter by status"
             options={STATUS_OPTIONS}
             allowClear
@@ -162,7 +163,7 @@ const AdminUsers = () => {
           <SelectInput
             name="plan"
             value={planFilter || undefined}
-            onChange={(v) => { setPlanFilter(v || ""); setPage(1); }}
+            onChange={(v) => { setPlanFilter(v || ""); setPageIndex(1); }}
             placeholder="Filter by plan"
             options={PLAN_OPTIONS}
             allowClear
@@ -177,8 +178,9 @@ const AdminUsers = () => {
           dataSource={data}
           loading={loading}
           total={total}
-          pageSize={25}
-          onPageChange={(p) => setPage(p)}
+          pageSize={pageSize}
+          pageIndex={pageIndex - 1}
+          onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
         />
       </div>
     </div>

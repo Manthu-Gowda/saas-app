@@ -63,7 +63,7 @@ export const getDashboardStats = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const { search = '', status, plan, page = 1, limit = 25 } = req.query;
+    const { search = '', status, plan, pageIndex = 1, pageSize = 25 } = req.query;
     const query = { role: 'CUSTOMER' };
     if (status) query.status = status;
     if (plan) query.planTier = plan;
@@ -79,10 +79,10 @@ export const getAllUsers = async (req, res) => {
       .select('-password')
       .populate('industryId', 'name icon')
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit));
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
 
-    res.json({ users, total, page: Number(page), limit: Number(limit) });
+    res.json({ users, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -498,14 +498,14 @@ export const getAnalytics = async (req, res) => {
 
 export const getAuditLogs = async (req, res) => {
   try {
-    const { page = 1, limit = 25 } = req.query;
+    const { pageIndex = 1, pageSize = 25 } = req.query;
     const total = await AuditLog.countDocuments();
     const logs = await AuditLog.find({})
       .populate('userId', 'name email')
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit));
-    res.json({ logs, total, page: Number(page) });
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
+    res.json({ logs, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -517,7 +517,7 @@ export const getAuditLogs = async (req, res) => {
 
 export const getAdminInvoices = async (req, res) => {
   try {
-    const { page = 1, limit = 25, search = '' } = req.query;
+    const { pageIndex = 1, pageSize = 25, search = '' } = req.query;
     const query = {};
 
     if (search) {
@@ -538,10 +538,10 @@ export const getAdminInvoices = async (req, res) => {
     const invoices = await Invoice.find(query)
       .populate('userId', 'name email')
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit));
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
 
-    res.json({ invoices, total, page: Number(page) });
+    res.json({ invoices, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -549,7 +549,7 @@ export const getAdminInvoices = async (req, res) => {
 
 export const getSubscriptionsOverview = async (req, res) => {
   try {
-    const { page = 1, limit = 25, plan, status } = req.query;
+    const { pageIndex = 1, pageSize = 25, plan, status } = req.query;
     const query = { role: 'CUSTOMER' };
     if (plan) query.planTier = plan;
     if (status) query.status = status;
@@ -559,10 +559,10 @@ export const getSubscriptionsOverview = async (req, res) => {
       .select('-password')
       .populate('industryId', 'name')
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit));
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
 
-    res.json({ subscriptions: users, total, page: Number(page) });
+    res.json({ subscriptions: users, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

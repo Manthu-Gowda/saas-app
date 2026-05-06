@@ -26,6 +26,86 @@ app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(cors());
 app.use(express.json());
 
+// Global response formatter
+app.use((req, res, next) => {
+  const originalJson = res.json;
+  
+  res.json = function (body) {
+    // Exclude Swagger and Stripe Webhook from formatting
+    if (req.originalUrl.startsWith('/api/docs') || req.originalUrl.startsWith('/api/stripe/webhook')) {
+      return originalJson.call(this, body);
+    }
+
+    // Already formatted check
+    if (body && typeof body === 'object' && 'statusCode' in body && 'data' in body) {
+      return originalJson.call(this, body);
+    }
+
+    // Check if paginated (has total, pageIndex, pageSize)
+    let isPaginated = false;
+    let paginatedData = null;
+    let pageIndex = 1;
+    let pageSize = 10;
+    let totalRecords = 0;
+
+    if (body && typeof body === 'object' && 'total' in body && 'pageIndex' in body && 'pageSize' in body) {
+      isPaginated = true;
+      pageIndex = body.pageIndex;
+      pageSize = body.pageSize;
+      totalRecords = body.total || 0;
+      
+      const keys = Object.keys(body).filter(k => !['total', 'pageIndex', 'pageSize', 'message'].includes(k));
+      if (keys.length > 0) {
+        paginatedData = body[keys[0]];
+      } else {
+        paginatedData = [];
+      }
+    }
+
+    if (isPaginated) {
+      const pIndex = Number(pageIndex) || 1;
+      const pSize = Number(pageSize) || 10;
+      const hasNextPage = (pIndex * pSize) < totalRecords;
+      const hasPreviousPage = pIndex > 1;
+
+      return originalJson.call(this, {
+        statusCode: res.statusCode || 200,
+        message: body.message || "Success",
+        pageIndex: pIndex,
+        pageSize: pSize,
+        totalRecords,
+        hasNextPage,
+        hasPreviousPage,
+        data: paginatedData
+      });
+    }
+
+    // Standard format
+    let message = "Success";
+    let data = body;
+    
+    if (res.statusCode >= 400 && body && body.message) {
+      message = body.message;
+      data = {};
+    } else if (body && typeof body === 'object' && body.message && Object.keys(body).length === 1) {
+      message = body.message;
+      data = {};
+    } else if (body && typeof body === 'object' && body.message) {
+       message = body.message;
+       const { message: _, ...rest } = body;
+       data = Object.keys(rest).length === 0 ? {} : rest;
+    }
+
+    return originalJson.call(this, {
+      statusCode: res.statusCode || 200,
+      message,
+      data: data === undefined ? {} : data
+    });
+  };
+  
+  next();
+});
+
 // Swagger UI — available at http://localhost:5000/api/docs
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: 'Zynapse API Docs',

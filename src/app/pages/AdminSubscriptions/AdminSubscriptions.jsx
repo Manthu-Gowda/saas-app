@@ -23,25 +23,25 @@ const AdminSubscriptions = () => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [planFilter, setPlanFilter] = useState("");
-  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const [total, setTotal] = useState(0);
-  const pageSize = 20;
 
-  const fetchSubs = useCallback(async (pg = 1) => {
+  const fetchSubs = useCallback(async (pg = 1, size = pageSize) => {
     setLoading(true);
     try {
       const { data: res } = await axiosInstance.get(ADMIN_GET_SUBSCRIPTIONS, {
-        params: { page: pg, limit: pageSize, search, plan: planFilter || undefined },
+        params: { pageIndex: pg, pageSize: size, search, plan: planFilter || undefined },
       });
-      const items = res.subscriptions || res.users || res;
+      const items = res.data || res;
       setData(Array.isArray(items) ? items : []);
-      setTotal(res.total || items.length);
+      setTotal(res.totalRecords || items.length);
     } catch { errorToast("Failed to load subscriptions"); }
     finally { setLoading(false); }
   }, [search, planFilter]);
 
-  useEffect(() => { setPage(1); fetchSubs(1); }, [search, planFilter]);
-  useEffect(() => { if (page > 1) fetchSubs(page); }, [page]);
+  useEffect(() => { setPageIndex(1); fetchSubs(1, pageSize); }, [search, planFilter, pageSize]);
+  useEffect(() => { fetchSubs(pageIndex, pageSize); }, [pageIndex, fetchSubs, pageSize]);
 
   const columns = [
     {
@@ -128,8 +128,8 @@ const AdminSubscriptions = () => {
           loading={loading}
           total={total}
           pageSize={pageSize}
-          pageIndex={page - 1}
-          onPageChange={(p) => setPage(p)}
+          pageIndex={pageIndex - 1}
+          onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
         />
       </div>
     </div>

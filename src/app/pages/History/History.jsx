@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SubHeader from "../../components/SubHeader/SubHeader";
 import CustomTable from "../../components/CustomTable/CustomTable";
 import StatusBadge from "../../components/StatusBadge/StatusBadge";
@@ -12,32 +12,38 @@ import "./History.scss";
 const History = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [total, setTotal] = useState(0);
+
+  const fetchHistory = useCallback(async (pg = pageIndex, size = pageSize) => {
+    setLoading(true);
+    try {
+      const { data: res } = await axiosInstance.get(GET_HISTORY, {
+        params: { pageIndex: pg, pageSize: size }
+      });
+      
+      const historyList = res.data || res;
+      const formattedData = historyList.map(item => ({
+        id: item._id,
+        date: new Date(item.createdAt).toLocaleString(),
+        toolName: item.toolId?.name || "Unknown Tool",
+        prompt: item.prompt,
+        status: item.status
+      }));
+      
+      setData(formattedData);
+      setTotal(res.totalRecords || formattedData.length);
+    } catch (error) {
+      errorToast("Failed to load history");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axiosInstance.get(GET_HISTORY);
-        
-        // Map the backend data to the table format
-        const formattedData = data.map(item => ({
-          id: item._id,
-          date: new Date(item.createdAt).toLocaleString(),
-          toolName: item.toolId?.name || "Unknown Tool",
-          prompt: item.prompt,
-          status: item.status
-        }));
-        
-        setData(formattedData);
-      } catch (error) {
-        errorToast("Failed to load history");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchHistory();
-  }, []);
+    fetchHistory(pageIndex, pageSize);
+  }, [fetchHistory, pageIndex, pageSize]);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -115,7 +121,10 @@ const History = () => {
           columns={columns}
           dataSource={data}
           loading={loading}
-          total={data.length}
+          total={total}
+          pageSize={pageSize}
+          pageIndex={pageIndex - 1}
+          onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
         />
       </div>
     </div>

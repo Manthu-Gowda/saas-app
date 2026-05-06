@@ -19,19 +19,19 @@ const AdminInvoices = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
   const [total, setTotal] = useState(0);
-  const pageSize = 25;
 
   const fetchInvoices = useCallback(
-    async (pg = 1) => {
+    async (pg = 1, size = pageSize) => {
       setLoading(true);
       try {
         const { data: res } = await axiosInstance.get(ADMIN_GET_INVOICES, {
-          params: { page: pg, limit: pageSize, search: search || undefined },
+          params: { pageIndex: pg, pageSize: size, search: search || undefined },
         });
-        setData(res.invoices || []);
-        setTotal(res.total || 0);
+        setData(res.data || []);
+        setTotal(res.totalRecords || 0);
       } catch {
         errorToast("Failed to load invoices");
       } finally {
@@ -42,13 +42,13 @@ const AdminInvoices = () => {
   );
 
   useEffect(() => {
-    setPage(1);
-    fetchInvoices(1);
-  }, [search]);
+    setPageIndex(1);
+    fetchInvoices(1, pageSize);
+  }, [search, pageSize]);
 
   useEffect(() => {
-    if (page > 1) fetchInvoices(page);
-  }, [page]);
+    fetchInvoices(pageIndex, pageSize);
+  }, [pageIndex, fetchInvoices, pageSize]);
 
   const formatAmount = (amount, currency) => {
     return new Intl.NumberFormat("en-US", {
@@ -149,8 +149,8 @@ const AdminInvoices = () => {
           loading={loading}
           total={total}
           pageSize={pageSize}
-          pageIndex={page - 1}
-          onPageChange={(p) => setPage(p)}
+          pageIndex={pageIndex - 1}
+          onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
         />
       </div>
     </div>

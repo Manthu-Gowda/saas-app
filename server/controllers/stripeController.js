@@ -281,10 +281,13 @@ export const handleWebhook = async (req, res) => {
 
 export const getMyInvoices = async (req, res) => {
   try {
+    const { pageIndex = 1, pageSize = 20 } = req.query;
+    const total = await Invoice.countDocuments({ userId: req.user._id });
     const invoices = await Invoice.find({ userId: req.user._id })
       .sort({ createdAt: -1 })
-      .limit(20);
-    res.json(invoices);
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
+    res.json({ invoices, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

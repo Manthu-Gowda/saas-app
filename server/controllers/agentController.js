@@ -152,14 +152,14 @@ export const runAgent = async (req, res) => {
 
 export const getAgentHistory = async (req, res) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { pageIndex = 1, pageSize = 20 } = req.query;
     const total = await AgentRun.countDocuments({ userId: req.user._id });
     const runs = await AgentRun.find({ userId: req.user._id })
       .populate('agentId', 'name icon')
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit));
-    res.json({ runs, total, page: Number(page) });
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize));
+    res.json({ runs, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

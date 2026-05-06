@@ -34,15 +34,15 @@ export const getDashboard = async (req, res) => {
 
 export const getHistory = async (req, res) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { pageIndex = 1, pageSize = 20 } = req.query;
     const total = await History.countDocuments({ userId: req.user._id });
     const history = await History.find({ userId: req.user._id })
       .sort({ createdAt: -1 })
-      .skip((Number(page) - 1) * Number(limit))
-      .limit(Number(limit))
+      .skip((Number(pageIndex) - 1) * Number(pageSize))
+      .limit(Number(pageSize))
       .populate('toolId', 'name icon');
 
-    res.json({ history, total, page: Number(page) });
+    res.json({ history, total, pageIndex: Number(pageIndex), pageSize: Number(pageSize) });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

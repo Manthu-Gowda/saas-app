@@ -17,23 +17,23 @@ const ACTION_COLORS = {
 const AdminAuditLogs = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const [total, setTotal] = useState(0);
-  const pageSize = 20;
 
-  const fetchLogs = useCallback(async (pg = 1) => {
+    const fetchLogs = useCallback(async (pg = 1, size = pageSize) => {
     setLoading(true);
     try {
       const { data: res } = await axiosInstance.get(ADMIN_GET_AUDIT_LOGS, {
-        params: { page: pg, limit: pageSize },
+        params: { pageIndex: pg, pageSize: size },
       });
-      setData(res.logs || res);
-      setTotal(res.total || (res.logs ? res.logs.length : res.length));
+      setData(res.data || res);
+      setTotal(res.totalRecords || (res.data ? res.data.length : res.length));
     } catch { errorToast("Failed to load audit logs"); }
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { fetchLogs(page); }, [fetchLogs, page]);
+  useEffect(() => { fetchLogs(pageIndex, pageSize); }, [fetchLogs, pageIndex, pageSize]);
 
   const columns = [
     {
@@ -114,8 +114,8 @@ const AdminAuditLogs = () => {
           loading={loading}
           total={total}
           pageSize={pageSize}
-          pageIndex={page - 1}
-          onPageChange={(p) => setPage(p)}
+          pageIndex={pageIndex - 1}
+          onPageChange={(p, size) => { setPageIndex(p); setPageSize(size); }}
         />
       </div>
     </div>

@@ -21,10 +21,22 @@ axiosInstance.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-// ─── Response interceptor — handle 401 ───────────────────────
+// ─── Response interceptor — handle standard responses & 401 ──────
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // If the response follows the new standard format
+    if (response.data && response.data.statusCode !== undefined && response.data.data !== undefined) {
+      if (response.data.totalRecords !== undefined) {
+        // It's a paginated response. Let the components access response.data.data and response.data.totalRecords
+        // We do not unwrap it so the pagination metadata remains intact.
+        return response;
+      } else {
+        // Standard non-paginated response unwrapping
+        response.data = response.data.data;
+      }
+    }
+    return response;
+  },
   async (error) => {
     const status = error?.response?.status;
 
